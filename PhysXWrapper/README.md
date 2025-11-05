@@ -400,17 +400,17 @@ ctest --output-on-failure > test_results.txt 2>&1
 
 ### 第三阶段：扩展实现 (进行中 - PhysX Snippets完整覆盖)
 
-基于PhysX官方72个Snippets，当前已实现24个(33%)，计划逐步补充剩余48个：
+基于PhysX官方72个Snippets，当前已实现30个(42%)，计划逐步补充剩余42个：
 
 **高优先级 (正在实现)**
 - [x] **JointDrive** - D6关节驱动系统 ✅
 - [x] **ToleranceScale** - 容差缩放配置 ✅
 - [x] **Stepper** - 自定义时间步长控制器 ✅
-- [ ] MassProperties - 质量属性计算示例
-- [ ] MultiThreading - 多线程优化示例
+- [x] **MassProperties** - 质量属性计算示例 ✅
+- [x] **MultiThreading** - 多线程优化示例 ✅
+- [x] **CustomJoint** - 自定义关节类型 (RopeJoint实现) ✅
 
-**关节系统扩展 (8个待实现)**
-- [ ] CustomJoint - 自定义关节类型
+**关节系统扩展 (7个待实现)**
 - [ ] GearJoint - 齿轮关节
 - [ ] RackJoint - 齿条齿轮关节
 - [ ] MimicJoint - 模仿关节

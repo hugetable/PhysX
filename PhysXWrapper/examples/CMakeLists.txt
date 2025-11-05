@@ -99,4 +99,13 @@ add_physxwrapper_example(example_tolerancescale example_tolerancescale.cpp)
 # Example 27: Stepper (Custom Time Stepping and Substepping for Accuracy)
 add_physxwrapper_example(example_stepper example_stepper.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (27 examples)")
+# Example 28: Mass Properties (Mass Calculation, Inertia Tensors, CoM)
+add_physxwrapper_example(example_massproperties example_massproperties.cpp)
+
+# Example 29: Multithreading (Thread Pool, Performance Scaling, Parallel Queries)
+add_physxwrapper_example(example_multithreading example_multithreading.cpp)
+
+# Example 30: Custom Joint (PxConstraintConnector Implementation - Rope Joint)
+add_physxwrapper_example(example_customjoint example_customjoint.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (30 examples)")

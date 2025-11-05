@@ -1,33 +1,226 @@
 /**
  * @file example_stepper.cpp
- * @brief Custom Time Stepper and Substepping Example
+ * @brief Advanced Time Stepper with Continuation Tasks and Substepping
  *
- * This example demonstrates advanced time stepping techniques in PhysX:
- * - Substepping: dividing each frame into multiple smaller substeps
+ * This example demonstrates PhysX's advanced time stepping with:
+ * - Continuation tasks using PxLightCpuTask
+ * - Chained substep completion tasks
  * - Kinematic actor updates between substeps
- * - Improved accuracy for fast-moving objects
- * - Variable timestep handling
+ * - Thread-safe task management
+ * - Atomic operations for synchronization
  *
  * Based on PhysX Snippet: SnippetStepper
  *
- * Key Concepts:
- * - Substepping improves simulation accuracy
- * - Kinematic actors can be updated between substeps
- * - Useful for precise control of moving platforms
- * - Trade-off: better accuracy vs more computation
+ * Implementation Details:
+ * - Uses PxLightCpuTask for lightweight task management
+ * - Each substep has a completion task that triggers the next
+ * - Kinematic platform updated before each substep
+ * - Reference counting ensures proper task sequencing
+ * - Synchronization primitives for thread safety
  *
- * Scenario:
- * A kinematic platform oscillates vertically (sine wave motion)
- * A dynamic sphere bounces on the platform
- * The platform position is updated before each substep
+ * Architecture:
+ * Main Thread -> startSubstep(0) -> simulate() -> CompletionTask.run()
+ *             -> startSubstep(1) -> simulate() -> CompletionTask.run()
+ *             ...
+ *             -> all substeps done -> signal completion
  */
 
 #include "PhysXCore.h"
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
 
 using namespace PhysXWrapper;
+
+// Forward declarations
+class StepperExample;
+void startNextSubstep();
+
+// ============================================================================
+// Synchronization primitives
+// ============================================================================
+
+class Sync {
+private:
+    std::mutex mutex;
+    std::condition_variable cv;
+    bool signaled;
+
+public:
+    Sync() : signaled(false) {}
+
+    void reset() {
+        std::lock_guard<std::mutex> lock(mutex);
+        signaled = false;
+    }
+
+    void signal() {
+        std::lock_guard<std::mutex> lock(mutex);
+        signaled = true;
+        cv.notify_one();
+    }
+
+    void wait() {
+        std::unique_lock<std::mutex> lock(mutex);
+        cv.wait(lock, [this] { return signaled; });
+    }
+};
+
+// ============================================================================
+// Global stepper context
+// ============================================================================
+
+struct StepContext {
+    PxScene* scene;
+    PxRigidDynamic* kinematicPlatform;
+
+    // Substepping state
+    static constexpr int NUM_SUBSTEPS = 2;
+    static constexpr PxReal SUBSTEP_LENGTH = 1.0f / 120.0f;  // 120Hz substeps
+
+    std::atomic<int> substepsFinished;
+    std::atomic<int> tasksDestroyed;
+    Sync* completionSync;
+
+    // Platform motion parameters
+    PxReal totalTime;
+    static constexpr PxReal PERIOD = 4.0f;
+    static constexpr PxReal AMPLITUDE = 5.0f;
+
+    // Task pool
+    class SubstepCompletionTask* taskPool;
+
+    StepContext()
+        : scene(nullptr)
+        , kinematicPlatform(nullptr)
+        , substepsFinished(0)
+        , tasksDestroyed(0)
+        , completionSync(nullptr)
+        , totalTime(0.0f)
+        , taskPool(nullptr)
+    {}
+};
+
+static StepContext g_stepContext;
+
+// ============================================================================
+// Substep Completion Task
+// ============================================================================
+
+/**
+ * @brief Completion task that runs after each substep
+ *
+ * This task is submitted to PhysX as a continuation task. It:
+ * 1. Calls fetchResults() to get simulation results
+ * 2. Checks if more substeps are needed
+ * 3. Triggers the next substep if needed
+ * 4. Signals completion when all substeps are done
+ *
+ * Thread Safety:
+ * - Uses atomic counters for substeps and tasks
+ * - Reference counting prevents premature execution
+ * - Release() may run concurrently with other tasks
+ */
+class SubstepCompletionTask : public PxLightCpuTask {
+private:
+    int substepIndex;
+
+public:
+    SubstepCompletionTask(int index = 0)
+        : PxLightCpuTask()
+        , substepIndex(index)
+    {
+        // Get task manager from scene
+        if (g_stepContext.scene) {
+            mTm = g_stepContext.scene->getTaskManager();
+        }
+    }
+
+    virtual void run() override {
+        // Fetch results from the substep that just completed
+        g_stepContext.scene->fetchResults(true);
+
+        // Increment finished counter
+        int finished = g_stepContext.substepsFinished.fetch_add(1) + 1;
+
+        // If more substeps needed, start the next one
+        if (finished < StepContext::NUM_SUBSTEPS) {
+            startNextSubstep();
+        }
+    }
+
+    virtual void release() override {
+        // Manually call destructor
+        this->~SubstepCompletionTask();
+
+        // Check if all tasks are destroyed
+        // release() calls may run concurrently, so use atomic increment
+        int destroyed = g_stepContext.tasksDestroyed.fetch_add(1) + 1;
+
+        if (destroyed == StepContext::NUM_SUBSTEPS) {
+            // All substeps complete, signal main thread
+            g_stepContext.completionSync->signal();
+        }
+    }
+
+    virtual const char* getName() const override {
+        return "SubstepCompletionTask";
+    }
+};
+
+// ============================================================================
+// Stepper Implementation
+// ============================================================================
+
+void updateKinematicTarget(PxReal time) {
+    if (!g_stepContext.kinematicPlatform) return;
+
+    // Calculate sinusoidal platform position
+    PxReal angularVelocity = PxTwoPi / StepContext::PERIOD;
+    PxReal yPosition = std::sin(angularVelocity * time) * StepContext::AMPLITUDE;
+
+    // Set kinematic target for smooth motion
+    PxTransform targetPose(PxVec3(0.0f, yPosition, 0.0f));
+    g_stepContext.kinematicPlatform->setKinematicTarget(targetPose);
+}
+
+void startNextSubstep() {
+    // Get current substep index
+    int substepIndex = g_stepContext.substepsFinished.load();
+
+    // Calculate time for this substep
+    PxReal substepTime = g_stepContext.totalTime + substepIndex * StepContext::SUBSTEP_LENGTH;
+
+    // Update kinematic platform target BEFORE substep
+    updateKinematicTarget(substepTime);
+
+    // Create completion task for this substep
+    // Use placement new to allocate from task pool
+    SubstepCompletionTask* completionTask =
+        new (&g_stepContext.taskPool[substepIndex]) SubstepCompletionTask(substepIndex);
+
+    // Set reference count to 1
+    // This prevents the task from running until we call removeReference()
+    completionTask->addReference();
+
+    // Submit simulation with completion task
+    // PhysX will call completionTask->run() when simulation finishes
+    g_stepContext.scene->simulate(StepContext::SUBSTEP_LENGTH, completionTask);
+
+    // We can do parallel work here that must complete before task->run()
+    // (nothing needed for this example)
+
+    // Remove reference to allow task to run
+    // Once simulation completes, completionTask->run() will execute
+    completionTask->removeReference();
+}
+
+// ============================================================================
+// Main Example Class
+// ============================================================================
 
 class StepperExample {
 private:
@@ -39,23 +232,8 @@ private:
     PxRigidDynamic* kinematicPlatform;
     PxRigidDynamic* dynamicSphere;
 
-    // Substepping configuration
-    static constexpr PxReal SUBSTEP_LENGTH = 1.0f / 120.0f;  // 120Hz substeps
-    static constexpr int NUM_SUBSTEPS = 2;                    // 2 substeps per frame
-    static constexpr PxReal FRAME_TIME = SUBSTEP_LENGTH * NUM_SUBSTEPS;  // 60Hz frame rate
-
-    // Platform motion parameters
-    PxReal totalTime;
-    static constexpr PxReal PERIOD = 4.0f;      // Oscillation period in seconds
-    static constexpr PxReal AMPLITUDE = 5.0f;   // Oscillation amplitude in meters
-
-    enum class SteppingMode {
-        NO_SUBSTEPPING,         // Single step per frame
-        FIXED_SUBSTEPPING,      // Fixed substeps per frame
-        ADAPTIVE_SUBSTEPPING    // Adaptive based on velocities
-    };
-
-    SteppingMode currentMode;
+    SubstepCompletionTask* taskPool;
+    Sync completionSync;
 
 public:
     StepperExample()
@@ -64,8 +242,7 @@ public:
         , material(nullptr)
         , kinematicPlatform(nullptr)
         , dynamicSphere(nullptr)
-        , totalTime(0.0f)
-        , currentMode(SteppingMode::FIXED_SUBSTEPPING)
+        , taskPool(nullptr)
     {}
 
     ~StepperExample() {
@@ -73,6 +250,10 @@ public:
     }
 
     bool initialize() {
+        std::cout << "==================================================" << std::endl;
+        std::cout << "PhysX Advanced Stepper Example" << std::endl;
+        std::cout << "==================================================" << std::endl;
+
         // Initialize PhysX
         PhysXCore::Config config;
         config.gravity = PxVec3(0.0f, -9.81f, 0.0f);
@@ -85,103 +266,59 @@ public:
 
         physics = core.getPhysics();
         scene = core.getScene();
-
-        // Create material with some bounciness
         material = physics->createMaterial(0.5f, 0.5f, 0.7f);
+
+        // Setup global context
+        g_stepContext.scene = scene;
+        g_stepContext.completionSync = &completionSync;
+
+        // Allocate task pool (one task per substep)
+        taskPool = new SubstepCompletionTask[StepContext::NUM_SUBSTEPS];
+        g_stepContext.taskPool = taskPool;
 
         // Create kinematic platform
         PxBoxGeometry platformGeom(5.0f, 0.5f, 5.0f);
         PxTransform platformPose(PxVec3(0.0f, 0.0f, 0.0f));
-
         kinematicPlatform = PxCreateDynamic(*physics, platformPose, platformGeom, *material, 1.0f);
         kinematicPlatform->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
         scene->addActor(*kinematicPlatform);
 
+        g_stepContext.kinematicPlatform = kinematicPlatform;
+
         // Create dynamic sphere
         PxSphereGeometry sphereGeom(1.0f);
         PxTransform spherePose(PxVec3(0.0f, 5.0f, 0.0f));
-
         dynamicSphere = PxCreateDynamic(*physics, spherePose, sphereGeom, *material, 1.0f);
-        dynamicSphere->setAngularDamping(0.5f);
         scene->addActor(*dynamicSphere);
 
-        std::cout << "PhysX Stepper Example Initialized" << std::endl;
-        std::cout << "Substep length: " << (SUBSTEP_LENGTH * 1000) << "ms" << std::endl;
-        std::cout << "Number of substeps: " << NUM_SUBSTEPS << std::endl;
-        std::cout << "Effective frame rate: " << (1.0f / FRAME_TIME) << " Hz" << std::endl;
+        std::cout << "\nConfiguration:" << std::endl;
+        std::cout << "  Substeps per frame: " << StepContext::NUM_SUBSTEPS << std::endl;
+        std::cout << "  Substep length: " << (StepContext::SUBSTEP_LENGTH * 1000) << " ms" << std::endl;
+        std::cout << "  Total frame time: "
+                  << (StepContext::NUM_SUBSTEPS * StepContext::SUBSTEP_LENGTH * 1000) << " ms" << std::endl;
+        std::cout << "  Platform period: " << StepContext::PERIOD << " seconds" << std::endl;
+        std::cout << "  Platform amplitude: " << StepContext::AMPLITUDE << " meters" << std::endl;
+        std::cout << "\nUsing continuation tasks with atomic synchronization" << std::endl;
 
         return true;
     }
 
-    void updateKinematicTarget(PxReal time) {
-        // Calculate platform position using sine wave
-        PxReal angularVelocity = PxTwoPi / PERIOD;
-        PxReal yPosition = std::sin(angularVelocity * time) * AMPLITUDE;
+    void runOneStep() {
+        // Reset step context
+        completionSync.reset();
+        g_stepContext.substepsFinished = 0;
+        g_stepContext.tasksDestroyed = 0;
 
-        // Set kinematic target
-        PxTransform targetPose(PxVec3(0.0f, yPosition, 0.0f));
-        kinematicPlatform->setKinematicTarget(targetPose);
-    }
+        // Start first substep
+        // This will trigger a chain: substep0 -> substep1 -> ... -> completion
+        startNextSubstep();
 
-    void simulateWithoutSubstepping(PxReal dt) {
-        // Simple single-step simulation
-        scene->simulate(dt);
-        scene->fetchResults(true);
-    }
+        // Wait for all substeps to complete
+        // This blocks until the last task signals completion
+        completionSync.wait();
 
-    void simulateWithFixedSubstepping(PxReal dt) {
-        // Fixed number of substeps per frame
-        int numSubsteps = NUM_SUBSTEPS;
-        PxReal substepDt = dt / numSubsteps;
-
-        for (int i = 0; i < numSubsteps; i++) {
-            // Update kinematic target before each substep
-            updateKinematicTarget(totalTime + i * substepDt);
-
-            // Run substep
-            scene->simulate(substepDt);
-            scene->fetchResults(true);
-        }
-    }
-
-    void simulateWithAdaptiveSubstepping(PxReal dt) {
-        // Adaptive substepping based on sphere velocity
-        PxVec3 sphereVel = dynamicSphere->getLinearVelocity();
-        PxReal speed = sphereVel.magnitude();
-
-        // More substeps for faster motion
-        int numSubsteps = 1;
-        if (speed > 10.0f) {
-            numSubsteps = 4;
-        } else if (speed > 5.0f) {
-            numSubsteps = 2;
-        }
-
-        PxReal substepDt = dt / numSubsteps;
-
-        for (int i = 0; i < numSubsteps; i++) {
-            updateKinematicTarget(totalTime + i * substepDt);
-            scene->simulate(substepDt);
-            scene->fetchResults(true);
-        }
-    }
-
-    void simulate(PxReal dt) {
-        switch (currentMode) {
-            case SteppingMode::NO_SUBSTEPPING:
-                simulateWithoutSubstepping(dt);
-                break;
-
-            case SteppingMode::FIXED_SUBSTEPPING:
-                simulateWithFixedSubstepping(dt);
-                break;
-
-            case SteppingMode::ADAPTIVE_SUBSTEPPING:
-                simulateWithAdaptiveSubstepping(dt);
-                break;
-        }
-
-        totalTime += dt;
+        // Update total time
+        g_stepContext.totalTime += StepContext::NUM_SUBSTEPS * StepContext::SUBSTEP_LENGTH;
     }
 
     void printStatus(int frame) {
@@ -189,110 +326,64 @@ public:
         PxTransform spherePose = dynamicSphere->getGlobalPose();
         PxVec3 sphereVel = dynamicSphere->getLinearVelocity();
 
-        std::cout << std::fixed << std::setprecision(2);
-        std::cout << "Frame " << std::setw(4) << frame << " @ t=" << std::setw(5) << totalTime << "s  ";
-        std::cout << "Platform Y=" << std::setw(6) << platformPose.p.y << "  ";
-        std::cout << "Sphere Y=" << std::setw(6) << spherePose.p.y << "  ";
-        std::cout << "Speed=" << std::setw(6) << sphereVel.magnitude() << std::endl;
-    }
-
-    void runComparison() {
-        std::cout << "\n========================================" << std::endl;
-        std::cout << "COMPARING STEPPING MODES" << std::endl;
-        std::cout << "========================================\n" << std::endl;
-
-        // Test each mode
-        struct TestResult {
-            std::string modeName;
-            PxReal finalSphereHeight;
-            PxReal avgSpeed;
-            int contactCount;
-        };
-
-        std::vector<TestResult> results;
-
-        for (int mode = 0; mode < 3; mode++) {
-            // Reset scene
-            dynamicSphere->setGlobalPose(PxTransform(PxVec3(0.0f, 5.0f, 0.0f)));
-            dynamicSphere->setLinearVelocity(PxVec3(0.0f));
-            dynamicSphere->setAngularVelocity(PxVec3(0.0f));
-            totalTime = 0.0f;
-
-            currentMode = static_cast<SteppingMode>(mode);
-
-            std::string modeName;
-            switch (currentMode) {
-                case SteppingMode::NO_SUBSTEPPING:
-                    modeName = "No Substepping (60Hz)";
-                    break;
-                case SteppingMode::FIXED_SUBSTEPPING:
-                    modeName = "Fixed Substepping (2x120Hz)";
-                    break;
-                case SteppingMode::ADAPTIVE_SUBSTEPPING:
-                    modeName = "Adaptive Substepping";
-                    break;
-            }
-
-            std::cout << "\n--- Testing: " << modeName << " ---" << std::endl;
-
-            // Simulate for 10 seconds
-            const int totalFrames = 600;  // 10 seconds at 60fps
-            PxReal totalSpeed = 0.0f;
-
-            for (int frame = 0; frame < totalFrames; frame++) {
-                simulate(FRAME_TIME);
-
-                PxVec3 vel = dynamicSphere->getLinearVelocity();
-                totalSpeed += vel.magnitude();
-
-                // Print status every second
-                if (frame % 60 == 0) {
-                    printStatus(frame);
-                }
-            }
-
-            // Record result
-            TestResult result;
-            result.modeName = modeName;
-            result.finalSphereHeight = dynamicSphere->getGlobalPose().p.y;
-            result.avgSpeed = totalSpeed / totalFrames;
-            result.contactCount = 0;  // Would need contact reporting to track
-            results.push_back(result);
-
-            std::cout << "Final sphere height: " << result.finalSphereHeight << std::endl;
-            std::cout << "Average speed: " << result.avgSpeed << std::endl;
-        }
-
-        // Print comparison
-        std::cout << "\n========================================" << std::endl;
-        std::cout << "RESULTS COMPARISON" << std::endl;
-        std::cout << "========================================" << std::endl;
-
-        for (const auto& result : results) {
-            std::cout << "\n" << result.modeName << ":" << std::endl;
-            std::cout << "  Final height: " << result.finalSphereHeight << std::endl;
-            std::cout << "  Avg speed: " << result.avgSpeed << std::endl;
-        }
-
-        std::cout << "\nObservations:" << std::endl;
-        std::cout << "- Substepping provides more accurate collision detection" << std::endl;
-        std::cout << "- Kinematic updates between substeps = smoother interaction" << std::endl;
-        std::cout << "- Adaptive substepping balances accuracy and performance" << std::endl;
-    }
-
-    void cleanup() {
-        if (kinematicPlatform) kinematicPlatform->release();
-        if (dynamicSphere) dynamicSphere->release();
-        if (material) material->release();
-        core.cleanup();
+        std::cout << std::fixed << std::setprecision(3);
+        std::cout << "Frame " << std::setw(4) << frame
+                  << " @ t=" << std::setw(6) << g_stepContext.totalTime << "s  ";
+        std::cout << "Platform Y=" << std::setw(7) << platformPose.p.y << "  ";
+        std::cout << "Sphere Y=" << std::setw(7) << spherePose.p.y << "  ";
+        std::cout << "Speed=" << std::setw(6) << sphereVel.magnitude() << " m/s" << std::endl;
     }
 
     void run() {
-        std::cout << "\nStarting Stepper Example..." << std::endl;
-        runComparison();
-        std::cout << "\nExample complete!" << std::endl;
+        std::cout << "\n=== Starting Simulation ===" << std::endl;
+        std::cout << "The kinematic platform oscillates with a sine wave" << std::endl;
+        std::cout << "The dynamic sphere bounces on the platform" << std::endl;
+        std::cout << "Platform position updated before EACH substep" << std::endl;
+        std::cout << "================================\n" << std::endl;
+
+        const int totalFrames = 600;  // 10 seconds at 60fps
+
+        for (int frame = 0; frame < totalFrames; frame++) {
+            runOneStep();
+
+            // Print status every 60 frames (1 second)
+            if (frame % 60 == 0) {
+                printStatus(frame);
+            }
+        }
+
+        std::cout << "\n=== Simulation Complete ===" << std::endl;
+        printStatus(totalFrames);
+
+        std::cout << "\nKey Features Demonstrated:" << std::endl;
+        std::cout << "  ✓ Continuation tasks for chained substeps" << std::endl;
+        std::cout << "  ✓ Atomic operations for thread-safe counters" << std::endl;
+        std::cout << "  ✓ Synchronization primitives (mutex, condition_variable)" << std::endl;
+        std::cout << "  ✓ Kinematic updates between substeps" << std::endl;
+        std::cout << "  ✓ Task pool memory management" << std::endl;
+        std::cout << "  ✓ Reference counting for task sequencing" << std::endl;
+    }
+
+    void cleanup() {
+        if (taskPool) {
+            delete[] taskPool;
+            taskPool = nullptr;
+        }
+
+        if (kinematicPlatform) kinematicPlatform->release();
+        if (dynamicSphere) dynamicSphere->release();
+        if (material) material->release();
+
+        // Clear global context
+        g_stepContext = StepContext();
+
+        core.cleanup();
     }
 };
+
+// ============================================================================
+// Main
+// ============================================================================
 
 int main() {
     StepperExample example;
