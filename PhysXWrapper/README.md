@@ -29,6 +29,7 @@
 | **Vehicle** | 车辆物理 | 📅 计划中 | - |
 | **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery, FrustumQuery, PointDistanceQuery |
 | **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator, SerializationManager |
+| **Debug** | 调试可视化 | ✅ 已完成 | DebugDrawer |
 
 ## 🚀 快速开始
 
@@ -125,7 +126,8 @@ PhysXWrapper/
 │   ├── Particle/          # 粒子系统
 │   ├── Vehicle/           # 车辆模拟
 │   ├── Query/             # 查询系统
-│   └── Utility/           # 工具类
+│   ├── Utility/           # 工具类
+│   └── Debug/             # 调试可视化
 ├── src/                  # 实现文件（与include结构对应）
 ├── examples/             # 使用示例
 ├── docs/                 # 文档
@@ -152,6 +154,7 @@ PhysXWrapper/
 - ✅ `example_pbdfluid.cpp` - PBD流体模拟（演示PBDFluidManager创建水、油、蜜等流体、多材料、扩散粒子效果）**需要GPU/CUDA**
 - ✅ `example_frustum.cpp` - 视锥体剔除（演示FrustumQuery进行可见性剔除、BVH加速、相机视锥体查询）
 - ✅ `example_pointdistance.cpp` - 点距离查询（演示PointDistanceQuery查找最近点、批量查询、场景查询、距离场生成）
+- ✅ `example_debug.cpp` - 物理调试可视化（演示DebugDrawer绘制形状、关节、速度、AABB、质心、自定义图元）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -189,6 +192,9 @@ PhysXWrapper/
 - [x] **example_frustum** - 视锥体剔除示例程序
 - [x] **PointDistanceQuery** - 点距离查询 (⭐⭐⭐)
 - [x] **example_pointdistance** - 点距离查询示例程序
+- [x] **SerializationManager** - 场景序列化系统 (⭐⭐⭐⭐)
+- [x] **DebugDrawer** - 物理调试可视化 (⭐⭐⭐⭐)
+- [x] **example_debug** - 调试可视化示例程序
 
 ### 第二阶段：高级功能 (已完成)
 - [x] JointManager - 基本关节系统（球形、固定、铰链、滑动、距离、D6、关节链）
@@ -204,7 +210,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现16个核心类：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现17个核心类、15个示例程序，约21,000+行代码：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -221,6 +227,7 @@ PhysXWrapper/
 - FrustumQuery（视锥体剔除：相机视锥体查询、BVH加速、场景剔除）
 - PointDistanceQuery（点距离查询：最近点计算、批量查询、场景查询、距离场生成）
 - SerializationManager（序列化：场景保存/加载、对象序列化、二进制格式、内存管理）
+- DebugDrawer（调试可视化：形状线框、关节、速度矢量、AABB、质心、坐标轴）
 
 ## 🤝 贡献
 

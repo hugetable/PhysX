@@ -60,4 +60,7 @@ add_physxwrapper_example(example_frustum example_frustum.cpp)
 # Example 14: Point Distance Query
 add_physxwrapper_example(example_pointdistance example_pointdistance.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (14 examples)")
+# Example 15: Debug Drawer (Physics Visualization)
+add_physxwrapper_example(example_debug example_debug.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (15 examples)")
