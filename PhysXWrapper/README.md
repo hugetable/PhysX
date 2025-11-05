@@ -28,7 +28,7 @@
 | **Particle** | 粒子系统（PBD） | ✅ 已完成 | PBDFluidManager |
 | **Vehicle** | 车辆物理 | 📅 计划中 | - |
 | **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery, FrustumQuery, PointDistanceQuery |
-| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator, SerializationManager |
+| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator, SerializationManager, BVHBuilder |
 | **Debug** | 调试可视化 | ✅ 已完成 | DebugDrawer |
 
 ## 🚀 快速开始
@@ -155,6 +155,7 @@ PhysXWrapper/
 - ✅ `example_frustum.cpp` - 视锥体剔除（演示FrustumQuery进行可见性剔除、BVH加速、相机视锥体查询）
 - ✅ `example_pointdistance.cpp` - 点距离查询（演示PointDistanceQuery查找最近点、批量查询、场景查询、距离场生成）
 - ✅ `example_debug.cpp` - 物理调试可视化（演示DebugDrawer绘制形状、关节、速度、AABB、质心、自定义图元）
+- ✅ `example_bvh.cpp` - BVH空间加速结构（演示BVHBuilder创建BVH、复合球体、盒子网格、性能优化）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -195,6 +196,8 @@ PhysXWrapper/
 - [x] **SerializationManager** - 场景序列化系统 (⭐⭐⭐⭐)
 - [x] **DebugDrawer** - 物理调试可视化 (⭐⭐⭐⭐)
 - [x] **example_debug** - 调试可视化示例程序
+- [x] **BVHBuilder** - BVH空间加速结构 (⭐⭐⭐)
+- [x] **example_bvh** - BVH构建示例程序
 
 ### 第二阶段：高级功能 (已完成)
 - [x] JointManager - 基本关节系统（球形、固定、铰链、滑动、距离、D6、关节链）
@@ -210,7 +213,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现17个核心类、15个示例程序，约21,000+行代码：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现18个核心类、16个示例程序，约23,000+行代码：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -228,6 +231,7 @@ PhysXWrapper/
 - PointDistanceQuery（点距离查询：最近点计算、批量查询、场景查询、距离场生成）
 - SerializationManager（序列化：场景保存/加载、对象序列化、二进制格式、内存管理）
 - DebugDrawer（调试可视化：形状线框、关节、速度矢量、AABB、质心、坐标轴）
+- BVHBuilder（BVH加速结构：复合actor优化、场景查询加速、空间划分、性能提升）
 
 ## 🤝 贡献
 
