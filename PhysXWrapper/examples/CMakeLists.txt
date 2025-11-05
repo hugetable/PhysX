@@ -51,4 +51,7 @@ add_physxwrapper_example(example_deformable example_deformable.cpp)
 # Example 11: Contact Modifier (Runtime Contact Modification)
 add_physxwrapper_example(example_contactmodifier example_contactmodifier.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (11 examples)")
+# Example 12: PBD Fluid Simulation - Requires GPU/CUDA
+add_physxwrapper_example(example_pbdfluid example_pbdfluid.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (12 examples)")

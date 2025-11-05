@@ -25,7 +25,7 @@
 | **Joint** | 关节和约束 | ✅ 已完成 | JointManager |
 | **Articulation** | 关节链系统 | ✅ 已完成 | ArticulationManager |
 | **Deformable** | 软体模拟（需要GPU） | ✅ 已完成 | DeformableVolumeManager |
-| **Particle** | 粒子系统（PBD） | 📅 计划中 | - |
+| **Particle** | 粒子系统（PBD） | ✅ 已完成 | PBDFluidManager |
 | **Vehicle** | 车辆物理 | 📅 计划中 | - |
 | **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery |
 | **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator |
@@ -149,6 +149,7 @@ PhysXWrapper/
 - ✅ `example_articulation.cpp` - 关节链系统（演示ArticulationManager创建机器人手臂、灵活链条、自定义关节链）
 - ✅ `example_deformable.cpp` - 软体变形体（演示DeformableVolumeManager创建软体、GPU加速、材料配置）**需要GPU/CUDA**
 - ✅ `example_contactmodifier.cpp` - 运行时接触修改（演示ContactModifier调整质量比率、摩擦力、恢复系数、自定义修改）
+- ✅ `example_pbdfluid.cpp` - PBD流体模拟（演示PBDFluidManager创建水、油、蜜等流体、多材料、扩散粒子效果）**需要GPU/CUDA**
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -180,13 +181,15 @@ PhysXWrapper/
 - [x] **example_deformable** - 软体变形体示例程序
 - [x] **ContactModifier** - 运行时接触修改 (⭐⭐⭐⭐)
 - [x] **example_contactmodifier** - 接触修改示例程序
+- [x] **PBDFluidManager** - 粒子流体系统 (⭐⭐⭐⭐⭐)
+- [x] **example_pbdfluid** - PBD流体模拟示例程序
 
-### 第二阶段：高级功能 (当前阶段)
+### 第二阶段：高级功能 (已完成)
 - [x] JointManager - 基本关节系统（球形、固定、铰链、滑动、距离、D6、关节链）
 - [x] ArticulationManager - 减少坐标关节链系统（机器人、骨骼系统）
 - [x] DeformableVolumeManager - GPU加速软体模拟（需要CUDA）
 - [x] ContactModifier - 运行时接触修改（质量比率、摩擦力、恢复系数）
-- [ ] PBDFluid - 流体粒子系统
+- [x] PBDFluidManager - 粒子流体系统（水、油、蜜、多材料、扩散粒子）
 
 ### 第四阶段：完善和优化 (持续)
 - [ ] 性能优化和基准测试
@@ -195,7 +198,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现12个核心类：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现13个核心类：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -208,6 +211,7 @@ PhysXWrapper/
 - ArticulationManager（关节链系统：机器人、骨骼、灵活链条）
 - DeformableVolumeManager（软体变形体：GPU加速、材料配置、网格生成）
 - ContactModifier（运行时接触修改：质量比率、摩擦力、恢复系数、自定义规则）
+- PBDFluidManager（粒子流体：水、油、蜜等多材料、扩散粒子效果、GPU加速）
 
 ## 🤝 贡献
 
