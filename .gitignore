@@ -1,0 +1,31 @@
+
+# Build directories
+build/
+build_*/
+*/build/
+*/build_*/
+**/build/
+**/build_*/
+
+# Binary outputs
+*.so
+*.a
+*.o
+bin/
+lib/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.cmake
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.log
+/tmp/
