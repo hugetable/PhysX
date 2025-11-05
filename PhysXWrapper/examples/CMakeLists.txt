@@ -27,4 +27,7 @@ add_physxwrapper_example(example_contactreport example_contactreport.cpp)
 # Example 3: Geometry Query
 add_physxwrapper_example(example_geometryquery example_geometryquery.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (3 examples)")
+# Example 4: Convex Mesh Builder
+add_physxwrapper_example(example_convexmesh example_convexmesh.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (4 examples)")

@@ -27,7 +27,7 @@
 | **Particle** | 粒子系统（PBD） | 📅 计划中 | - |
 | **Vehicle** | 车辆物理 | 📅 计划中 | - |
 | **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery |
-| **Utility** | 工具类（网格创建等） | 📅 计划中 | - |
+| **Utility** | 工具类（网格创建等） | 🚧 开发中 | ConvexMeshBuilder |
 
 ## 🚀 快速开始
 
@@ -140,6 +140,7 @@ PhysXWrapper/
 - ✅ `example_helloworld.cpp` - 最基础的使用示例（演示PhysXCore基本功能）
 - ✅ `example_contactreport.cpp` - 碰撞检测和回调（演示RigidBodyContactHandler）
 - ✅ `example_geometryquery.cpp` - 场景查询（演示GeometryQuery射线投射、扫描、重叠检测）
+- ✅ `example_convexmesh.cpp` - 凸网格创建（演示ConvexMeshBuilder从点云创建网格）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -154,7 +155,8 @@ PhysXWrapper/
 - [x] **example_contactreport** - 碰撞事件示例程序
 - [x] **GeometryQuery** - 射线投射和查询 (⭐⭐⭐⭐⭐)
 - [x] **example_geometryquery** - 场景查询示例程序
-- [ ] **ConvexMeshBuilder** - 凸网格创建 (⭐⭐⭐⭐)
+- [x] **ConvexMeshBuilder** - 凸网格创建 (⭐⭐⭐⭐)
+- [x] **example_convexmesh** - 凸网格创建示例程序
 - [ ] **TriangleMeshBuilder** - 三角网格创建 (⭐⭐⭐⭐)
 
 ### 第二阶段：刚体完善 (2-3周)
@@ -176,7 +178,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 43% 完成 (3/7 核心类已实现：PhysXCore, RigidBodyContactHandler, GeometryQuery)
+**当前进度**: 第一阶段 57% 完成 (4/7 核心类已实现：PhysXCore, RigidBodyContactHandler, GeometryQuery, ConvexMeshBuilder)
 
 ## 🤝 贡献
 
