@@ -21,12 +21,12 @@
 | 模块 | 功能 | 状态 | 已实现类 |
 |------|------|------|----------|
 | **Core** | 核心初始化、场景管理 | ✅ 已完成 | PhysXCore |
-| **RigidBody** | 刚体动力学 | 🚧 开发中 | (进行中) |
+| **RigidBody** | 刚体动力学 | 🚧 开发中 | RigidBodyContactHandler |
 | **Joint** | 关节和约束 | 📅 计划中 | - |
 | **Deformable** | 软体模拟 | 📅 计划中 | - |
 | **Particle** | 粒子系统（PBD） | 📅 计划中 | - |
 | **Vehicle** | 车辆物理 | 📅 计划中 | - |
-| **Query** | 场景查询（射线投射等） | 📅 计划中 | - |
+| **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery |
 | **Utility** | 工具类（网格创建等） | 📅 计划中 | - |
 
 ## 🚀 快速开始
@@ -137,13 +137,10 @@ PhysXWrapper/
 
 查看 `examples/` 目录获取更多示例：
 
-- `examples/01_HelloWorld/` - 最基础的使用示例
-- `examples/02_Collision/` - 碰撞检测和回调
-- `examples/03_Joints/` - 关节系统使用
-- `examples/04_SoftBody/` - 软体模拟（需要GPU）
-- `examples/05_Particles/` - 粒子系统（需要GPU）
-- `examples/06_Vehicle/` - 车辆物理模拟
-- 更多示例添加中...
+- ✅ `example_helloworld.cpp` - 最基础的使用示例（演示PhysXCore基本功能）
+- ✅ `example_contactreport.cpp` - 碰撞检测和回调（演示RigidBodyContactHandler）
+- ✅ `example_geometryquery.cpp` - 场景查询（演示GeometryQuery射线投射、扫描、重叠检测）
+- 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
 
@@ -153,8 +150,10 @@ PhysXWrapper/
 - [x] CMake构建系统
 - [x] **PhysXCore基础类** - Foundation/Physics/Scene管理
 - [x] **example_helloworld** - HelloWorld示例程序
-- [ ] **RigidBodyContactHandler** - 碰撞回调系统 (⭐⭐⭐⭐⭐)
-- [ ] **GeometryQuery** - 射线投射和查询 (⭐⭐⭐⭐⭐)
+- [x] **RigidBodyContactHandler** - 碰撞回调系统 (⭐⭐⭐⭐⭐)
+- [x] **example_contactreport** - 碰撞事件示例程序
+- [x] **GeometryQuery** - 射线投射和查询 (⭐⭐⭐⭐⭐)
+- [x] **example_geometryquery** - 场景查询示例程序
 - [ ] **ConvexMeshBuilder** - 凸网格创建 (⭐⭐⭐⭐)
 - [ ] **TriangleMeshBuilder** - 三角网格创建 (⭐⭐⭐⭐)
 
@@ -177,7 +176,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 15% 完成 (1/7 核心类已实现)
+**当前进度**: 第一阶段 43% 完成 (3/7 核心类已实现：PhysXCore, RigidBodyContactHandler, GeometryQuery)
 
 ## 🤝 贡献
 
