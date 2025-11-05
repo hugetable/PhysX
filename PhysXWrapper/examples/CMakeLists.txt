@@ -75,4 +75,7 @@ add_physxwrapper_example(example_collection example_collection.cpp)
 # Example 19: Character Controller (Kinematic Character Movement)
 add_physxwrapper_example(example_character example_character.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (19 examples)")
+# Example 20: Aggregate Manager (Actor Grouping for Performance)
+add_physxwrapper_example(example_aggregate example_aggregate.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (20 examples)")
