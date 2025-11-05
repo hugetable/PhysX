@@ -36,4 +36,7 @@ add_physxwrapper_example(example_trianglemesh example_trianglemesh.cpp)
 # Example 6: Trigger Volumes
 add_physxwrapper_example(example_trigger example_trigger.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (6 examples)")
+# Example 7: Continuous Collision Detection (CCD)
+add_physxwrapper_example(example_ccd example_ccd.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (7 examples)")

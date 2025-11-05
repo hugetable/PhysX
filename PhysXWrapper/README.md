@@ -21,13 +21,13 @@
 | 模块 | 功能 | 状态 | 已实现类 |
 |------|------|------|----------|
 | **Core** | 核心初始化、场景管理 | ✅ 已完成 | PhysXCore |
-| **RigidBody** | 刚体动力学 | 🚧 开发中 | RigidBodyContactHandler, RigidBodyTrigger |
+| **RigidBody** | 刚体动力学 | ✅ 已完成 | RigidBodyContactHandler, RigidBodyTrigger, RigidBodyCCD |
 | **Joint** | 关节和约束 | 📅 计划中 | - |
 | **Deformable** | 软体模拟 | 📅 计划中 | - |
 | **Particle** | 粒子系统（PBD） | 📅 计划中 | - |
 | **Vehicle** | 车辆物理 | 📅 计划中 | - |
 | **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery |
-| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder |
+| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator |
 
 ## 🚀 快速开始
 
@@ -143,6 +143,7 @@ PhysXWrapper/
 - ✅ `example_convexmesh.cpp` - 凸网格创建（演示ConvexMeshBuilder从点云创建网格）
 - ✅ `example_trianglemesh.cpp` - 三角网格创建（演示TriangleMeshBuilder创建地形等静态几何体）
 - ✅ `example_trigger.cpp` - 触发器体积（演示RigidBodyTrigger创建触发区域和事件检测）
+- ✅ `example_ccd.cpp` - 连续碰撞检测（演示RigidBodyCCD防止高速物体穿透）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -163,11 +164,11 @@ PhysXWrapper/
 - [x] **example_trianglemesh** - 三角网格创建示例程序
 - [x] **RigidBodyTrigger** - 触发器区域 (⭐⭐⭐⭐)
 - [x] **example_trigger** - 触发器示例程序
+- [x] **RigidBodyCCD** - 连续碰撞检测 (⭐⭐⭐⭐)
+- [x] **example_ccd** - CCD示例程序
+- [x] **RigidBodyMassCalculator** - 质量属性计算 (⭐⭐⭐⭐)
 
-### 第二阶段：刚体完善 (2-3周)
-- [ ] RigidBodyCCD - 连续碰撞检测
-- [ ] RigidBodyMassCalculator - 质量属性计算
-- [ ] 完整的刚体动力学系统
+### 第二阶段：扩展功能 (已完成基础刚体系统)
 
 ### 第三阶段：高级功能 (3-4周)
 - [ ] JointManager - 基本关节系统
@@ -182,7 +183,15 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 86% 完成 (6/7 核心类已实现：PhysXCore, RigidBodyContactHandler, GeometryQuery, ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyTrigger)
+**当前进度**: 第一阶段 100% 完成！已实现8个核心类：
+- PhysXCore（核心初始化）
+- RigidBodyContactHandler（碰撞回调）
+- GeometryQuery（场景查询）
+- ConvexMeshBuilder（凸网格）
+- TriangleMeshBuilder（三角网格）
+- RigidBodyTrigger（触发器）
+- RigidBodyCCD（连续碰撞检测）
+- RigidBodyMassCalculator（质量计算）
 
 ## 🤝 贡献
 
