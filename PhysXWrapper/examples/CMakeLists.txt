@@ -33,4 +33,7 @@ add_physxwrapper_example(example_convexmesh example_convexmesh.cpp)
 # Example 5: Triangle Mesh Builder
 add_physxwrapper_example(example_trianglemesh example_trianglemesh.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (5 examples)")
+# Example 6: Trigger Volumes
+add_physxwrapper_example(example_trigger example_trigger.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (6 examples)")
