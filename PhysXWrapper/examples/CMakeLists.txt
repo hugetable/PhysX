@@ -78,4 +78,7 @@ add_physxwrapper_example(example_character example_character.cpp)
 # Example 20: Aggregate Manager (Actor Grouping for Performance)
 add_physxwrapper_example(example_aggregate example_aggregate.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (20 examples)")
+# Example 21: Vehicle Manager (Wheeled Vehicle Physics)
+add_physxwrapper_example(example_vehicle example_vehicle.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (21 examples)")

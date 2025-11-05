@@ -27,7 +27,7 @@
 | **Deformable** | 软体模拟（需要GPU） | ✅ 已完成 | DeformableVolumeManager |
 | **Particle** | 粒子系统（PBD） | ✅ 已完成 | PBDFluidManager |
 | **Character** | 角色控制器 | ✅ 已完成 | CharacterController |
-| **Vehicle** | 车辆物理 | 📅 计划中 | - |
+| **Vehicle** | 车辆物理 | ✅ 已完成 | VehicleManager |
 | **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery, FrustumQuery, PointDistanceQuery |
 | **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator, SerializationManager, BVHBuilder, CollectionLoader |
 | **Debug** | 调试可视化 | ✅ 已完成 | DebugDrawer |
@@ -161,6 +161,7 @@ PhysXWrapper/
 - ✅ `example_collection.cpp` - 集合批量加载（演示CollectionLoader加载序列化集合、文件/内存加载、多集合管理）
 - ✅ `example_character.cpp` - 角色控制器（演示CharacterController实现角色移动、跳跃、障碍导航、爬楼梯、斜坡行走）
 - ✅ `example_aggregate.cpp` - 聚合管理器（演示AggregateManager实现actor分组、ragdoll、debris、vehicle、性能优化）
+- ✅ `example_vehicle.cpp` - 车辆管理器（演示VehicleManager实现车辆物理、油门/刹车/转向、4WD/FWD/RWD、多车辆）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -211,6 +212,8 @@ PhysXWrapper/
 - [x] **example_character** - 角色控制器示例程序
 - [x] **AggregateManager** - 聚合管理器 (⭐⭐⭐⭐)
 - [x] **example_aggregate** - 聚合管理器示例程序
+- [x] **VehicleManager** - 车辆管理器 (⭐⭐⭐⭐⭐)
+- [x] **example_vehicle** - 车辆管理器示例程序
 
 ### 第二阶段：高级功能 (已完成)
 - [x] JointManager - 基本关节系统（球形、固定、铰链、滑动、距离、D6、关节链）
@@ -226,7 +229,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现22个核心类、20个示例程序，约30,000+行代码：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现23个核心类、21个示例程序，约31,500+行代码：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -249,6 +252,7 @@ PhysXWrapper/
 - CollectionLoader（集合加载器：批量加载、场景资产管理、二进制/XML格式、依赖管理）
 - CharacterController（角色控制器：运动学角色、跳跃、爬坡、爬楼梯、碰撞检测、胶囊/盒体）
 - AggregateManager（聚合管理器：actor分组、性能优化、ragdoll、debris、vehicle）
+- VehicleManager（车辆管理器：4轮车辆、悬挂系统、引擎/变速箱、油门/刹车/转向、4WD/FWD/RWD）
 
 ## 🤝 贡献
 
