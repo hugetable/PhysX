@@ -81,4 +81,13 @@ add_physxwrapper_example(example_aggregate example_aggregate.cpp)
 # Example 21: Vehicle Manager (Wheeled Vehicle Physics)
 add_physxwrapper_example(example_vehicle example_vehicle.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (21 examples)")
+# Example 22: Material Library (Predefined Physical Materials)
+add_physxwrapper_example(example_material example_material.cpp)
+
+# Example 23: Physics Recorder (Recording and Playback)
+add_physxwrapper_example(example_recorder example_recorder.cpp)
+
+# Example 24: Performance Profiler (Performance Analysis and Monitoring)
+add_physxwrapper_example(example_profiler example_profiler.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (24 examples)")

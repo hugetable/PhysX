@@ -29,7 +29,7 @@
 | **Character** | 角色控制器 | ✅ 已完成 | CharacterController |
 | **Vehicle** | 车辆物理 | ✅ 已完成 | VehicleManager |
 | **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery, FrustumQuery, PointDistanceQuery |
-| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator, SerializationManager, BVHBuilder, CollectionLoader |
+| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator, SerializationManager, BVHBuilder, CollectionLoader, MaterialLibrary, PhysicsRecorder, PerformanceProfiler |
 | **Debug** | 调试可视化 | ✅ 已完成 | DebugDrawer |
 
 ## 🚀 快速开始
@@ -162,6 +162,9 @@ PhysXWrapper/
 - ✅ `example_character.cpp` - 角色控制器（演示CharacterController实现角色移动、跳跃、障碍导航、爬楼梯、斜坡行走）
 - ✅ `example_aggregate.cpp` - 聚合管理器（演示AggregateManager实现actor分组、ragdoll、debris、vehicle、性能优化）
 - ✅ `example_vehicle.cpp` - 车辆管理器（演示VehicleManager实现车辆物理、油门/刹车/转向、4WD/FWD/RWD、多车辆）
+- ✅ `example_material.cpp` - 材质库（演示MaterialLibrary使用预定义材质、自定义材质、材质混合、摩擦/弹性对比）
+- ✅ `example_recorder.cpp` - 物理录制器（演示PhysicsRecorder录制和回放物理模拟、时间控制、历史记录）
+- ✅ `example_profiler.cpp` - 性能分析器（演示PerformanceProfiler监控性能、统计分析、瓶颈检测、导出报告）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -214,6 +217,12 @@ PhysXWrapper/
 - [x] **example_aggregate** - 聚合管理器示例程序
 - [x] **VehicleManager** - 车辆管理器 (⭐⭐⭐⭐⭐)
 - [x] **example_vehicle** - 车辆管理器示例程序
+- [x] **MaterialLibrary** - 材质库 (⭐⭐⭐⭐)
+- [x] **example_material** - 材质库示例程序
+- [x] **PhysicsRecorder** - 物理录制器 (⭐⭐⭐)
+- [x] **example_recorder** - 录制器示例程序
+- [x] **PerformanceProfiler** - 性能分析器 (⭐⭐⭐⭐⭐)
+- [x] **example_profiler** - 性能分析器示例程序
 
 ### 第二阶段：高级功能 (已完成)
 - [x] JointManager - 基本关节系统（球形、固定、铰链、滑动、距离、D6、关节链）
@@ -229,7 +238,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现23个核心类、21个示例程序，约31,500+行代码：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现26个核心类、24个示例程序，约35,000+行代码：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -253,6 +262,9 @@ PhysXWrapper/
 - CharacterController（角色控制器：运动学角色、跳跃、爬坡、爬楼梯、碰撞检测、胶囊/盒体）
 - AggregateManager（聚合管理器：actor分组、性能优化、ragdoll、debris、vehicle）
 - VehicleManager（车辆管理器：4轮车辆、悬挂系统、引擎/变速箱、油门/刹车/转向、4WD/FWD/RWD）
+- MaterialLibrary（材质库：20+预定义材质、自定义材质、材质混合、真实物理属性）
+- PhysicsRecorder（物理录制器：录制/回放、时间控制、帧历史、保存/加载）
+- PerformanceProfiler（性能分析器：帧率统计、性能监控、瓶颈检测、CSV/JSON导出）
 
 ## 🤝 贡献
 
