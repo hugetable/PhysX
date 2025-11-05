@@ -66,4 +66,7 @@ add_physxwrapper_example(example_debug example_debug.cpp)
 # Example 16: BVH Builder (Spatial Acceleration)
 add_physxwrapper_example(example_bvh example_bvh.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (16 examples)")
+# Example 17: Gyroscopic Forces (Dzhanibekov Effect)
+add_physxwrapper_example(example_gyroscopic example_gyroscopic.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (17 examples)")

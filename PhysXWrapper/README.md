@@ -21,7 +21,7 @@
 | 模块 | 功能 | 状态 | 已实现类 |
 |------|------|------|----------|
 | **Core** | 核心初始化、场景管理 | ✅ 已完成 | PhysXCore |
-| **RigidBody** | 刚体动力学 | ✅ 已完成 | RigidBodyContactHandler, RigidBodyTrigger, RigidBodyCCD, ContactModifier |
+| **RigidBody** | 刚体动力学 | ✅ 已完成 | RigidBodyContactHandler, RigidBodyTrigger, RigidBodyCCD, ContactModifier, GyroscopicForces |
 | **Joint** | 关节和约束 | ✅ 已完成 | JointManager |
 | **Articulation** | 关节链系统 | ✅ 已完成 | ArticulationManager |
 | **Deformable** | 软体模拟（需要GPU） | ✅ 已完成 | DeformableVolumeManager |
@@ -156,6 +156,7 @@ PhysXWrapper/
 - ✅ `example_pointdistance.cpp` - 点距离查询（演示PointDistanceQuery查找最近点、批量查询、场景查询、距离场生成）
 - ✅ `example_debug.cpp` - 物理调试可视化（演示DebugDrawer绘制形状、关节、速度、AABB、质心、自定义图元）
 - ✅ `example_bvh.cpp` - BVH空间加速结构（演示BVHBuilder创建BVH、复合球体、盒子网格、性能优化）
+- ✅ `example_gyroscopic.cpp` - 陀螺力效果（演示GyroscopicForces展示Dzhanibekov效应、网球拍定理、能量守恒）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -198,6 +199,8 @@ PhysXWrapper/
 - [x] **example_debug** - 调试可视化示例程序
 - [x] **BVHBuilder** - BVH空间加速结构 (⭐⭐⭐)
 - [x] **example_bvh** - BVH构建示例程序
+- [x] **GyroscopicForces** - 陀螺力效果 (⭐⭐)
+- [x] **example_gyroscopic** - 陀螺力示例程序
 
 ### 第二阶段：高级功能 (已完成)
 - [x] JointManager - 基本关节系统（球形、固定、铰链、滑动、距离、D6、关节链）
@@ -213,7 +216,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现18个核心类、16个示例程序，约23,000+行代码：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现19个核心类、17个示例程序，约25,000+行代码：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -232,6 +235,7 @@ PhysXWrapper/
 - SerializationManager（序列化：场景保存/加载、对象序列化、二进制格式、内存管理）
 - DebugDrawer（调试可视化：形状线框、关节、速度矢量、AABB、质心、坐标轴）
 - BVHBuilder（BVH加速结构：复合actor优化、场景查询加速、空间划分、性能提升）
+- GyroscopicForces（陀螺力效果：Dzhanibekov效应、网球拍定理、角动量守恒、能量分析）
 
 ## 🤝 贡献
 
