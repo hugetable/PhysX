@@ -28,7 +28,7 @@
 | **Particle** | 粒子系统（PBD） | ✅ 已完成 | PBDFluidManager |
 | **Vehicle** | 车辆物理 | 📅 计划中 | - |
 | **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery, FrustumQuery, PointDistanceQuery |
-| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator |
+| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator, SerializationManager |
 
 ## 🚀 快速开始
 
@@ -204,7 +204,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现15个核心类：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现16个核心类：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -220,6 +220,7 @@ PhysXWrapper/
 - PBDFluidManager（粒子流体：水、油、蜜等多材料、扩散粒子效果、GPU加速）
 - FrustumQuery（视锥体剔除：相机视锥体查询、BVH加速、场景剔除）
 - PointDistanceQuery（点距离查询：最近点计算、批量查询、场景查询、距离场生成）
+- SerializationManager（序列化：场景保存/加载、对象序列化、二进制格式、内存管理）
 
 ## 🤝 贡献
 
