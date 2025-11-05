@@ -72,4 +72,7 @@ add_physxwrapper_example(example_gyroscopic example_gyroscopic.cpp)
 # Example 18: Collection Loader (Batch Loading)
 add_physxwrapper_example(example_collection example_collection.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (18 examples)")
+# Example 19: Character Controller (Kinematic Character Movement)
+add_physxwrapper_example(example_character example_character.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (19 examples)")
