@@ -39,4 +39,7 @@ add_physxwrapper_example(example_trigger example_trigger.cpp)
 # Example 7: Continuous Collision Detection (CCD)
 add_physxwrapper_example(example_ccd example_ccd.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (7 examples)")
+# Example 8: Joint System
+add_physxwrapper_example(example_joint example_joint.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (8 examples)")
