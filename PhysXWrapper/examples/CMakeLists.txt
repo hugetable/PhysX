@@ -69,4 +69,7 @@ add_physxwrapper_example(example_bvh example_bvh.cpp)
 # Example 17: Gyroscopic Forces (Dzhanibekov Effect)
 add_physxwrapper_example(example_gyroscopic example_gyroscopic.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (17 examples)")
+# Example 18: Collection Loader (Batch Loading)
+add_physxwrapper_example(example_collection example_collection.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (18 examples)")

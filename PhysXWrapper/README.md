@@ -28,7 +28,7 @@
 | **Particle** | 粒子系统（PBD） | ✅ 已完成 | PBDFluidManager |
 | **Vehicle** | 车辆物理 | 📅 计划中 | - |
 | **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery, FrustumQuery, PointDistanceQuery |
-| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator, SerializationManager, BVHBuilder |
+| **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator, SerializationManager, BVHBuilder, CollectionLoader |
 | **Debug** | 调试可视化 | ✅ 已完成 | DebugDrawer |
 
 ## 🚀 快速开始
@@ -157,6 +157,7 @@ PhysXWrapper/
 - ✅ `example_debug.cpp` - 物理调试可视化（演示DebugDrawer绘制形状、关节、速度、AABB、质心、自定义图元）
 - ✅ `example_bvh.cpp` - BVH空间加速结构（演示BVHBuilder创建BVH、复合球体、盒子网格、性能优化）
 - ✅ `example_gyroscopic.cpp` - 陀螺力效果（演示GyroscopicForces展示Dzhanibekov效应、网球拍定理、能量守恒）
+- ✅ `example_collection.cpp` - 集合批量加载（演示CollectionLoader加载序列化集合、文件/内存加载、多集合管理）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -201,6 +202,8 @@ PhysXWrapper/
 - [x] **example_bvh** - BVH构建示例程序
 - [x] **GyroscopicForces** - 陀螺力效果 (⭐⭐)
 - [x] **example_gyroscopic** - 陀螺力示例程序
+- [x] **CollectionLoader** - 集合批量加载 (⭐⭐⭐)
+- [x] **example_collection** - 集合加载示例程序
 
 ### 第二阶段：高级功能 (已完成)
 - [x] JointManager - 基本关节系统（球形、固定、铰链、滑动、距离、D6、关节链）
@@ -216,7 +219,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现19个核心类、17个示例程序，约25,000+行代码：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现20个核心类、18个示例程序，约27,000+行代码：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -236,6 +239,7 @@ PhysXWrapper/
 - DebugDrawer（调试可视化：形状线框、关节、速度矢量、AABB、质心、坐标轴）
 - BVHBuilder（BVH加速结构：复合actor优化、场景查询加速、空间划分、性能提升）
 - GyroscopicForces（陀螺力效果：Dzhanibekov效应、网球拍定理、角动量守恒、能量分析）
+- CollectionLoader（集合加载器：批量加载、场景资产管理、二进制/XML格式、依赖管理）
 
 ## 🤝 贡献
 
