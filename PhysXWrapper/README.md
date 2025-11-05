@@ -27,7 +27,7 @@
 | **Deformable** | 软体模拟（需要GPU） | ✅ 已完成 | DeformableVolumeManager |
 | **Particle** | 粒子系统（PBD） | ✅ 已完成 | PBDFluidManager |
 | **Vehicle** | 车辆物理 | 📅 计划中 | - |
-| **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery |
+| **Query** | 场景查询（射线投射等） | ✅ 已完成 | GeometryQuery, FrustumQuery |
 | **Utility** | 工具类（网格创建等） | ✅ 已完成 | ConvexMeshBuilder, TriangleMeshBuilder, RigidBodyMassCalculator |
 
 ## 🚀 快速开始
@@ -150,6 +150,7 @@ PhysXWrapper/
 - ✅ `example_deformable.cpp` - 软体变形体（演示DeformableVolumeManager创建软体、GPU加速、材料配置）**需要GPU/CUDA**
 - ✅ `example_contactmodifier.cpp` - 运行时接触修改（演示ContactModifier调整质量比率、摩擦力、恢复系数、自定义修改）
 - ✅ `example_pbdfluid.cpp` - PBD流体模拟（演示PBDFluidManager创建水、油、蜜等流体、多材料、扩散粒子效果）**需要GPU/CUDA**
+- ✅ `example_frustum.cpp` - 视锥体剔除（演示FrustumQuery进行可见性剔除、BVH加速、相机视锥体查询）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -183,6 +184,8 @@ PhysXWrapper/
 - [x] **example_contactmodifier** - 接触修改示例程序
 - [x] **PBDFluidManager** - 粒子流体系统 (⭐⭐⭐⭐⭐)
 - [x] **example_pbdfluid** - PBD流体模拟示例程序
+- [x] **FrustumQuery** - 视锥体剔除查询 (⭐⭐⭐)
+- [x] **example_frustum** - 视锥体剔除示例程序
 
 ### 第二阶段：高级功能 (已完成)
 - [x] JointManager - 基本关节系统（球形、固定、铰链、滑动、距离、D6、关节链）
@@ -198,7 +201,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现13个核心类：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现14个核心类：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -212,6 +215,7 @@ PhysXWrapper/
 - DeformableVolumeManager（软体变形体：GPU加速、材料配置、网格生成）
 - ContactModifier（运行时接触修改：质量比率、摩擦力、恢复系数、自定义规则）
 - PBDFluidManager（粒子流体：水、油、蜜等多材料、扩散粒子效果、GPU加速）
+- FrustumQuery（视锥体剔除：相机视锥体查询、BVH加速、场景剔除）
 
 ## 🤝 贡献
 

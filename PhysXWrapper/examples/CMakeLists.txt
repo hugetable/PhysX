@@ -54,4 +54,7 @@ add_physxwrapper_example(example_contactmodifier example_contactmodifier.cpp)
 # Example 12: PBD Fluid Simulation - Requires GPU/CUDA
 add_physxwrapper_example(example_pbdfluid example_pbdfluid.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (12 examples)")
+# Example 13: Frustum Query (View-Frustum Culling)
+add_physxwrapper_example(example_frustum example_frustum.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (13 examples)")
