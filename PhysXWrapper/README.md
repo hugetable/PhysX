@@ -21,7 +21,7 @@
 | 模块 | 功能 | 状态 | 已实现类 |
 |------|------|------|----------|
 | **Core** | 核心初始化、场景管理 | ✅ 已完成 | PhysXCore |
-| **RigidBody** | 刚体动力学 | ✅ 已完成 | RigidBodyContactHandler, RigidBodyTrigger, RigidBodyCCD |
+| **RigidBody** | 刚体动力学 | ✅ 已完成 | RigidBodyContactHandler, RigidBodyTrigger, RigidBodyCCD, ContactModifier |
 | **Joint** | 关节和约束 | ✅ 已完成 | JointManager |
 | **Articulation** | 关节链系统 | ✅ 已完成 | ArticulationManager |
 | **Deformable** | 软体模拟（需要GPU） | ✅ 已完成 | DeformableVolumeManager |
@@ -148,6 +148,7 @@ PhysXWrapper/
 - ✅ `example_joint.cpp` - 关节系统（演示JointManager创建各种关节类型：球形、固定、铰链、滑动、距离、D6、关节链）
 - ✅ `example_articulation.cpp` - 关节链系统（演示ArticulationManager创建机器人手臂、灵活链条、自定义关节链）
 - ✅ `example_deformable.cpp` - 软体变形体（演示DeformableVolumeManager创建软体、GPU加速、材料配置）**需要GPU/CUDA**
+- ✅ `example_contactmodifier.cpp` - 运行时接触修改（演示ContactModifier调整质量比率、摩擦力、恢复系数、自定义修改）
 - 📅 更多示例添加中...
 
 ## 🗺️ 开发路线图
@@ -177,11 +178,14 @@ PhysXWrapper/
 - [x] **example_articulation** - 关节链系统示例程序
 - [x] **DeformableVolumeManager** - 软体变形体系统 (⭐⭐⭐⭐⭐)
 - [x] **example_deformable** - 软体变形体示例程序
+- [x] **ContactModifier** - 运行时接触修改 (⭐⭐⭐⭐)
+- [x] **example_contactmodifier** - 接触修改示例程序
 
 ### 第二阶段：高级功能 (当前阶段)
 - [x] JointManager - 基本关节系统（球形、固定、铰链、滑动、距离、D6、关节链）
 - [x] ArticulationManager - 减少坐标关节链系统（机器人、骨骼系统）
 - [x] DeformableVolumeManager - GPU加速软体模拟（需要CUDA）
+- [x] ContactModifier - 运行时接触修改（质量比率、摩擦力、恢复系数）
 - [ ] PBDFluid - 流体粒子系统
 
 ### 第四阶段：完善和优化 (持续)
@@ -191,7 +195,7 @@ PhysXWrapper/
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 75% 完成 - 已实现11个核心类：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现12个核心类：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）
@@ -203,6 +207,7 @@ PhysXWrapper/
 - JointManager（关节系统：球形、固定、铰链、滑动、距离、D6、关节链）
 - ArticulationManager（关节链系统：机器人、骨骼、灵活链条）
 - DeformableVolumeManager（软体变形体：GPU加速、材料配置、网格生成）
+- ContactModifier（运行时接触修改：质量比率、摩擦力、恢复系数、自定义规则）
 
 ## 🤝 贡献
 

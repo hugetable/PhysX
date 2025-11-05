@@ -48,4 +48,7 @@ add_physxwrapper_example(example_articulation example_articulation.cpp)
 # Example 10: Deformable Volume (Soft Body) - Requires GPU/CUDA
 add_physxwrapper_example(example_deformable example_deformable.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (10 examples)")
+# Example 11: Contact Modifier (Runtime Contact Modification)
+add_physxwrapper_example(example_contactmodifier example_contactmodifier.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (11 examples)")
