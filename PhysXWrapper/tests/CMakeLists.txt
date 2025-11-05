@@ -28,10 +28,39 @@ if(GTest_FOUND)
         gtest_discover_tests(${TEST_NAME})
     endmacro()
 
-    # Tests will be added after implementing wrapper classes
-    # add_physxwrapper_test(test_physxcore test_physxcore.cpp)
+    # ========================================================================
+    # Unit Tests
+    # ========================================================================
 
-    message(STATUS "Google Test found. Tests configured (to be added after implementing wrapper classes)")
+    # Core functionality tests
+    add_physxwrapper_test(test_physxcore unit/test_physxcore.cpp)
+
+    # RigidBody tests
+    add_physxwrapper_test(test_rigidbody unit/test_rigidbody.cpp)
+
+    # Geometry tests
+    add_physxwrapper_test(test_geometry unit/test_geometry.cpp)
+
+    # Joint tests
+    add_physxwrapper_test(test_joints unit/test_joints.cpp)
+
+    # Query tests
+    add_physxwrapper_test(test_queries unit/test_queries.cpp)
+
+    # Utility tests
+    add_physxwrapper_test(test_utilities unit/test_utilities.cpp)
+
+    # ========================================================================
+    # Integration Tests
+    # ========================================================================
+
+    # Basic integration tests
+    add_physxwrapper_test(test_integration_basic integration/test_integration_basic.cpp)
+
+    # Performance integration tests
+    add_physxwrapper_test(test_integration_performance integration/test_integration_performance.cpp)
+
+    message(STATUS "Google Test found. Configured 8 test suites with comprehensive coverage")
 else()
     message(STATUS "Google Test not found. Tests disabled. Install GTest to enable testing.")
 endif()
