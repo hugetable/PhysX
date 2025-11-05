@@ -45,4 +45,7 @@ add_physxwrapper_example(example_joint example_joint.cpp)
 # Example 9: Articulation System
 add_physxwrapper_example(example_articulation example_articulation.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (9 examples)")
+# Example 10: Deformable Volume (Soft Body) - Requires GPU/CUDA
+add_physxwrapper_example(example_deformable example_deformable.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (10 examples)")
