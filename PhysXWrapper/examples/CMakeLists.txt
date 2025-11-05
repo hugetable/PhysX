@@ -30,4 +30,7 @@ add_physxwrapper_example(example_geometryquery example_geometryquery.cpp)
 # Example 4: Convex Mesh Builder
 add_physxwrapper_example(example_convexmesh example_convexmesh.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (4 examples)")
+# Example 5: Triangle Mesh Builder
+add_physxwrapper_example(example_trianglemesh example_trianglemesh.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (5 examples)")
