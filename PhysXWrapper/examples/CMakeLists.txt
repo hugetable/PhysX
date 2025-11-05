@@ -57,4 +57,7 @@ add_physxwrapper_example(example_pbdfluid example_pbdfluid.cpp)
 # Example 13: Frustum Query (View-Frustum Culling)
 add_physxwrapper_example(example_frustum example_frustum.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (13 examples)")
+# Example 14: Point Distance Query
+add_physxwrapper_example(example_pointdistance example_pointdistance.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (14 examples)")
