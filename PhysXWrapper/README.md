@@ -398,6 +398,80 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [x] ContactModifier - 运行时接触修改（质量比率、摩擦力、恢复系数）
 - [x] PBDFluidManager - 粒子流体系统（水、油、蜜、多材料、扩散粒子）
 
+### 第三阶段：扩展实现 (进行中 - PhysX Snippets完整覆盖)
+
+基于PhysX官方72个Snippets，当前已实现24个(33%)，计划逐步补充剩余48个：
+
+**高优先级 (正在实现)**
+- [x] **JointDrive** - D6关节驱动系统 ✅
+- [x] **ToleranceScale** - 容差缩放配置 ✅
+- [x] **Stepper** - 自定义时间步长控制器 ✅
+- [ ] MassProperties - 质量属性计算示例
+- [ ] MultiThreading - 多线程优化示例
+
+**关节系统扩展 (8个待实现)**
+- [ ] CustomJoint - 自定义关节类型
+- [ ] GearJoint - 齿轮关节
+- [ ] RackJoint - 齿条齿轮关节
+- [ ] MimicJoint - 模仿关节
+- [ ] FixedTendon - 固定肌腱
+- [ ] SpatialTendon - 空间肌腱
+- [ ] ImmediateArticulation - 即时模式关节链
+
+**软体/流体扩展 (8个待实现)**
+- [ ] PBDCloth - PBD布料模拟
+- [ ] PBDInflatable - PBD充气物体
+- [ ] DeformableMesh - 可变形网格
+- [ ] DeformableSurface - 可变形表面
+- [ ] DeformableSurfaceSkinning - 可变形表面蒙皮
+- [ ] DeformableVolumeAttachment - 软体附着到刚体
+- [ ] DeformableVolumeKinematic - 软体与运动学物体交互
+- [ ] DeformableVolumeSkinning - 软体蒙皮
+
+**车辆系统扩展 (6个待实现)**
+- [ ] VehicleDirectDrive - 直驱车辆
+- [ ] VehicleTankDrive - 坦克式驱动
+- [ ] VehicleTruck - 卡车物理
+- [ ] VehicleCustomSuspension - 自定义悬挂
+- [ ] VehicleCustomTire - 自定义轮胎模型
+- [ ] VehicleMultithreading - 多线程车辆
+
+**自定义几何/查询 (9个待实现)**
+- [ ] CustomGeometry - 自定义几何类型
+- [ ] CustomGeometryCollision - 自定义几何碰撞
+- [ ] CustomGeometryQueries - 自定义几何查询
+- [ ] CustomConvex - 自定义凸几何
+- [ ] StandaloneBroadphase - 独立宽相剔除器
+- [ ] StandaloneQuerySystem - 独立查询系统
+- [ ] QuerySystemAllQueries - 查询系统全功能
+- [ ] QuerySystemCustomCompound - 自定义复合查询
+- [ ] PrunerSerialization - 剔除器序列化
+
+**性能优化专题 (5个待实现)**
+- [ ] MBP - Multi Box Pruning宽相剔除
+- [ ] MultiPruners - 多剔除器支持
+- [ ] SplitSim - 分离仿真模式
+- [ ] SplitFetchResults - 分离获取结果
+- [ ] ImmediateMode - 即时模式(无Scene低层API)
+
+**GPU/Direct API (5个待实现 - 需要CUDA)**
+- [ ] HelloGRB - GPU刚体入门
+- [ ] RBDirectGPUAPI - 刚体Direct GPU API
+- [ ] DirectGPUAPIArticulation - 关节链Direct GPU API
+- [ ] DelayLoadHook - GPU延迟加载钩子
+- [ ] OmniPvd - OmniVerse PVD可视化
+
+**其他高级特性 (7个待实现)**
+- [ ] Isosurface - 等值面生成
+- [ ] SDF - 有向距离场
+- [ ] PathTracing - 路径追踪
+- [ ] CustomProfiler - 自定义分析器
+- [ ] ProfilerConverter - 分析器数据转换
+- [ ] ContactReportCCD - CCD接触报告
+- [ ] 其他工具类特性
+
+**覆盖率统计**: 27/72 已实现 (38%) | 目标: 60/72 (83% 常用功能)
+
 ### 第四阶段：完善和优化 (持续)
 - [ ] 性能优化和基准测试
 - [ ] 完善API文档
@@ -405,7 +479,7 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [ ] 示例程序库
 - [ ] 发布v1.0
 
-**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现26个核心类、24个示例程序、8个测试套件(100+测试用例)，约45,000+行代码：
+**当前进度**: 第一阶段 100% 完成！第二阶段 100% 完成 - 已实现26个核心类、27个示例程序、8个测试套件(100+测试用例)，约45,000+行代码：
 - PhysXCore（核心初始化）
 - RigidBodyContactHandler（碰撞回调）
 - GeometryQuery（场景查询）

@@ -90,4 +90,13 @@ add_physxwrapper_example(example_recorder example_recorder.cpp)
 # Example 24: Performance Profiler (Performance Analysis and Monitoring)
 add_physxwrapper_example(example_profiler example_profiler.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (24 examples)")
+# Example 25: Joint Drive (D6 Joint Drive System with Velocity/Position Control)
+add_physxwrapper_example(example_jointdrive example_jointdrive.cpp)
+
+# Example 26: Tolerance Scale (Unit System Configuration - meters vs centimeters)
+add_physxwrapper_example(example_tolerancescale example_tolerancescale.cpp)
+
+# Example 27: Stepper (Custom Time Stepping and Substepping for Accuracy)
+add_physxwrapper_example(example_stepper example_stepper.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (27 examples)")
