@@ -42,4 +42,7 @@ add_physxwrapper_example(example_ccd example_ccd.cpp)
 # Example 8: Joint System
 add_physxwrapper_example(example_joint example_joint.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (8 examples)")
+# Example 9: Articulation System
+add_physxwrapper_example(example_articulation example_articulation.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (9 examples)")
