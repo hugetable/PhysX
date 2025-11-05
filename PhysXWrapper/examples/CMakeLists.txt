@@ -21,4 +21,7 @@ endmacro()
 # Example 1: Hello World
 add_physxwrapper_example(example_helloworld example_helloworld.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully")
+# Example 2: Contact Report
+add_physxwrapper_example(example_contactreport example_contactreport.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (2 examples)")
