@@ -166,63 +166,57 @@ build_physx() {
 
     cd "$SCRIPT_DIR/physx"
 
-    # Convert config to CMake format
-    local cmake_config="Release"
-    local preset="linux"
-    if [ "$config" == "debug" ]; then
-        cmake_config="Debug"
-        preset="linux-debug"
-    elif [ "$config" == "checked" ]; then
-        cmake_config="Checked"
-        preset="linux-checked"
+    # Set PHYSX_ROOT_DIR environment variable (required by PhysX build system)
+    export PHYSX_ROOT_DIR="$SCRIPT_DIR/physx"
+
+    # Use simplified preset (no GPU, no snippets) to avoid packman dependencies
+    local preset="linux-clang-simple"
+
+    print_info "Using PhysX preset: $preset"
+    print_info "Setting PHYSX_ROOT_DIR=$PHYSX_ROOT_DIR"
+
+    # Call the PhysX CMake generation script
+    print_info "Generating PhysX build files..."
+
+    # Use Python to generate CMake files
+    if [ -f "buildtools/cmake_generate_projects.py" ]; then
+        python3 buildtools/cmake_generate_projects.py "$preset"
     else
-        preset="linux-release"
-    fi
-
-    # Create build directory
-    local build_dir="build_${config}"
-    print_info "Creating build directory: $build_dir"
-    mkdir -p "$build_dir"
-    cd "$build_dir"
-
-    # Configure with CMake using system dependencies
-    print_info "Configuring PhysX with CMake ($cmake_config) using system packages..."
-
-    # Use presets if available, otherwise use direct CMake
-    if [ -f "../source/compiler/cmake/linux/CMakeLists.txt" ]; then
-        cmake ../source/compiler/cmake/linux \
-            -DCMAKE_BUILD_TYPE=$cmake_config \
-            -DCMAKE_PREFIX_PATH="/usr" \
-            -DPX_BUILDSNIPPETS=OFF \
-            -DPX_BUILDPUBLICSAMPLES=OFF \
-            -DPX_GENERATE_STATIC_LIBRARIES=OFF \
-            -DPX_OUTPUT_LIB_DIR="${SCRIPT_DIR}/physx/bin/linux.clang/${config}" \
-            -DPX_OUTPUT_BIN_DIR="${SCRIPT_DIR}/physx/bin/linux.clang/${config}" \
-            -DCMAKE_CXX_COMPILER=clang++ \
-            -DCMAKE_C_COMPILER=clang
-    elif [ -f "../CMakeLists.txt" ]; then
-        cmake .. \
-            -DCMAKE_BUILD_TYPE=$cmake_config \
-            -DCMAKE_PREFIX_PATH="/usr" \
-            -DPX_BUILDSNIPPETS=OFF \
-            -DPX_BUILDPUBLICSAMPLES=OFF
-    else
-        print_error "Cannot find CMakeLists.txt"
+        print_error "cmake_generate_projects.py not found"
         cd "$SCRIPT_DIR"
         return 1
     fi
 
     if [ $? -ne 0 ]; then
-        print_error "CMake configuration failed"
-        print_info "This might be due to missing dependencies. Install with:"
-        echo "  sudo apt-get install libx11-dev libxrandr-dev libxcursor-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev"
+        print_error "Project generation failed"
+        print_info "This might be due to missing Python dependencies or preset issues"
         cd "$SCRIPT_DIR"
         return 1
     fi
 
-    # Build
+    # Determine the compiler directory based on preset
+    local compiler_dir="compiler/linux-clang"
+
+    if [ ! -d "$compiler_dir" ]; then
+        print_error "Compiler directory not found: $compiler_dir"
+        print_info "Available directories:"
+        ls -la compiler/ 2>/dev/null || echo "No compiler directory found"
+        cd "$SCRIPT_DIR"
+        return 1
+    fi
+
+    cd "$compiler_dir"
+
+    # Build the specific configuration
     print_info "Compiling PhysX ($config) with $JOBS jobs..."
-    cmake --build . --config $cmake_config -j ${JOBS}
+
+    if [ "$config" == "debug" ]; then
+        make debug -j${JOBS}
+    elif [ "$config" == "checked" ]; then
+        make checked -j${JOBS}
+    else
+        make release -j${JOBS}
+    fi
 
     if [ $? -ne 0 ]; then
         print_error "Compilation failed"
@@ -230,17 +224,9 @@ build_physx() {
         return 1
     fi
 
-    # Copy libraries to expected location if needed
-    print_info "Installing libraries..."
-    mkdir -p "${SCRIPT_DIR}/physx/bin/linux.clang/${config}"
-
-    # Find and copy built libraries
-    find . -name "*.so" -o -name "*.a" | while read lib; do
-        cp "$lib" "${SCRIPT_DIR}/physx/bin/linux.clang/${config}/" 2>/dev/null || true
-    done
-
     cd "$SCRIPT_DIR"
     print_success "PhysX ($config) built successfully"
+    print_info "Libraries location: physx/bin/linux.clang/${config}/"
 }
 
 build_blast() {
