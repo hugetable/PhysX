@@ -2,7 +2,7 @@
 
 **Last Updated:** 2025-11-06
 **Total Examples:** 72
-**Completed:** 64/72 (88.9%)
+**Completed:** 69/72 (95.8%)
 **Status:** 🔄 In Progress
 
 ## Documentation Requirements
@@ -516,8 +516,25 @@ For **each** of the 72 examples, we need to create a comprehensive LaTeX section
 
 ### Module 7: Performance Optimization (5 examples)
 
-#### Example 65-69: Performance Features
-- **Status:** ⏳ **PENDING** (group documentation)
+#### Example 65: MBP
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_65_mbp_EN.tex`
+
+#### Example 66: MultiPruners
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_66_multipruners_EN.tex`
+
+#### Example 67: CustomProfiler
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_67_customprofiler_EN.tex`
+
+#### Example 68: ProfilerConverter
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_68_profilerconverter_EN.tex`
+
+#### Example 69: PathTracing
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_69_pathtracing_EN.tex`
 
 ---
 
