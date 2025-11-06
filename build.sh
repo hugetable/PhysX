@@ -170,7 +170,7 @@ build_physx() {
     export PHYSX_ROOT_DIR="$SCRIPT_DIR/physx"
 
     # Use simplified preset (no GPU, no snippets) to avoid packman dependencies
-    local preset="linux-clang-simple"
+    local preset="linux-clang-cpu-only"
 
     print_info "Using PhysX preset: $preset"
     print_info "Setting PHYSX_ROOT_DIR=$PHYSX_ROOT_DIR"
@@ -194,8 +194,8 @@ build_physx() {
         return 1
     fi
 
-    # Determine the compiler directory based on preset
-    local compiler_dir="compiler/linux-clang"
+    # Determine the compiler directory based on preset and config
+    local compiler_dir="compiler/linux-clang-cpu-only-${config}"
 
     if [ ! -d "$compiler_dir" ]; then
         print_error "Compiler directory not found: $compiler_dir"
@@ -210,13 +210,9 @@ build_physx() {
     # Build the specific configuration
     print_info "Compiling PhysX ($config) with $JOBS jobs..."
 
-    if [ "$config" == "debug" ]; then
-        make debug -j${JOBS}
-    elif [ "$config" == "checked" ]; then
-        make checked -j${JOBS}
-    else
-        make release -j${JOBS}
-    fi
+    # For linux-clang-cpu-only preset, each config has its own directory
+    # Just use 'make' without specific target
+    make -j${JOBS}
 
     if [ $? -ne 0 ]; then
         print_error "Compilation failed"

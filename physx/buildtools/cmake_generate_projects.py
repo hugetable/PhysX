@@ -318,7 +318,10 @@ class CMakePreset:
 
 def getCommonParams():
     outString = '--no-warn-unused-cli'
-    outString = outString + ' -DCMAKE_PREFIX_PATH=\"' + os.environ['PM_PATHS'] + '\"'
+    # Only add CMAKE_PREFIX_PATH if PM_PATHS is set
+    pm_paths = os.environ.get('PM_PATHS', None)
+    if pm_paths:
+        outString = outString + ' -DCMAKE_PREFIX_PATH=\"' + pm_paths + '\"'
     outString = outString + ' -DPHYSX_ROOT_DIR=\"' + \
         os.environ['PHYSX_ROOT_DIR'] + '\"'
     outString = outString + ' -DPX_OUTPUT_LIB_DIR=\"' + \
@@ -341,7 +344,8 @@ def cleanupCompilerDir(compilerDirName):
 def presetProvided(pName, physx_root_dir):
     parsedPreset = CMakePreset(pName, physx_root_dir)
 
-    print('PM_PATHS: ' + os.environ['PM_PATHS'])
+    pm_paths = os.environ.get('PM_PATHS', 'Not set - using system tools')
+    print('PM_PATHS: ' + pm_paths)
 
     if os.environ.get('PM_cmake_PATH') is not None:
         cmakeExec = os.environ['PM_cmake_PATH'] + '/bin/cmake' + cmakeExt()
