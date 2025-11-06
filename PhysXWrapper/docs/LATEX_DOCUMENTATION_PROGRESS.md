@@ -2,7 +2,7 @@
 
 **Last Updated:** 2025-11-06
 **Total Examples:** 72
-**Completed:** 55/72 (76.4%)
+**Completed:** 64/72 (88.9%)
 **Status:** 🔄 In Progress
 
 ## Documentation Requirements
@@ -476,8 +476,41 @@ For **each** of the 72 examples, we need to create a comprehensive LaTeX section
 
 ### Module 6: Custom Geometry & Queries (9 examples)
 
-#### Example 56-64: Custom Geometry
-- **Status:** ⏳ **PENDING** (group documentation)
+#### Example 56: CustomConvex
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_56_customconvex_EN.tex`
+
+#### Example 57: CustomGeometry
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_57_customgeometry_EN.tex`
+
+#### Example 58: CustomGeometryCollision
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_58_customgeometrycollision_EN.tex`
+
+#### Example 59: CustomGeometryQueries
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_59_customgeometryqueries_EN.tex`
+
+#### Example 60: QuerySystemAllQueries
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_60_querysystemallqueries_EN.tex`
+
+#### Example 61: QuerySystemCustomCompound
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_61_querysystemcustomcompound_EN.tex`
+
+#### Example 62: StandaloneBroadphase
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_62_standalonebroadphase_EN.tex`
+
+#### Example 63: StandaloneQuerySystem
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_63_standalonequerysystem_EN.tex`
+
+#### Example 64: SDF
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_64_sdf_EN.tex`
 
 ---
 
