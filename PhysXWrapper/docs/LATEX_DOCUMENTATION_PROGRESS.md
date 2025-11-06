@@ -2,7 +2,7 @@
 
 **Last Updated:** 2025-11-06
 **Total Examples:** 72
-**Completed:** 41/72 (56.9%)
+**Completed:** 49/72 (68.1%)
 **Status:** 🔄 In Progress
 
 ## Documentation Requirements
@@ -412,8 +412,37 @@ For **each** of the 72 examples, we need to create a comprehensive LaTeX section
 
 ### Module 4: Soft Body & Fluids (8 examples)
 
-#### Example 42-49: Deformables & PBD
-- **Status:** ⏳ **PENDING** (group documentation)
+#### Example 42: DeformableMesh
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_42_deformablemesh_EN.tex`
+
+#### Example 43: DeformableSurface
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_43_deformablesurface_EN.tex`
+
+#### Example 44: DeformableSurfaceSkinning
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_44_deformablesurfaceskinning_EN.tex`
+
+#### Example 45: DeformableVolumeAttachment
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_45_deformablevolumeattachment_EN.tex`
+
+#### Example 46: DeformableVolumeKinematic
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_46_deformablevolumekinematic_EN.tex`
+
+#### Example 47: DeformableVolumeSkinning
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_47_deformablevolumeskinning_EN.tex`
+
+#### Example 48: PBDCloth
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_48_pbdcloth_EN.tex`
+
+#### Example 49: PBDInflatable
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_49_pbdinflatable_EN.tex`
 
 ---
 
