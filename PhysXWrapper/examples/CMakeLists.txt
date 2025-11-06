@@ -108,4 +108,13 @@ add_physxwrapper_example(example_multithreading example_multithreading.cpp)
 # Example 30: Custom Joint (PxConstraintConnector Implementation - Rope Joint)
 add_physxwrapper_example(example_customjoint example_customjoint.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (30 examples)")
+# Example 31: Gear Joint (Gear Ratio Constraint, Gear Trains, Mechanical Transmissions)
+add_physxwrapper_example(example_gearjoint example_gearjoint.cpp)
+
+# Example 32: Rack and Pinion Joint (Rotation to Linear Motion, Steering Systems)
+add_physxwrapper_example(example_rackjoint example_rackjoint.cpp)
+
+# Example 33: Mimic Joint (Follower Joint, Robotic Grippers, Coupled Motions)
+add_physxwrapper_example(example_mimicjoint example_mimicjoint.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (33 examples)")
