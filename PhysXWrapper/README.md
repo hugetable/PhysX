@@ -400,7 +400,7 @@ ctest --output-on-failure > test_results.txt 2>&1
 
 ### 第三阶段：扩展实现 (进行中 - PhysX Snippets完整覆盖)
 
-基于PhysX官方72个Snippets，当前已实现57个(79%)，计划逐步补充剩余15个：
+基于PhysX官方72个Snippets，当前已实现60个(83%) - 🎉 **已达成目标！** 🎉
 
 **高优先级与关节系统 (已完成 ✅)**
 - [x] **JointDrive** - D6关节驱动系统 ✅
@@ -434,7 +434,7 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [x] **VehicleCustomTire** - 自定义轮胎模型 (Pacejka公式、温度、磨损) ✅
 - [x] **VehicleMultithreading** - 多线程车辆 (并行仿真、Amdahl定律) ✅
 
-**自定义几何/查询 (部分完成 ✅)**
+**自定义几何/查询 (已完成 ✅ 9/9 = 100%)**
 - [x] **CustomGeometry** - 自定义几何类型 (椭球体实现) ✅
 - [x] **CustomGeometryCollision** - 自定义几何碰撞 (GJK/EPA算法) ✅
 - [x] **CustomGeometryQueries** - 自定义几何查询 (Raycast/Sweep/Overlap) ✅
@@ -442,11 +442,11 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [x] **StandaloneBroadphase** - 独立宽相剔除器 (AABB管理、SAP算法) ✅
 - [x] **StandaloneQuerySystem** - 独立查询系统 (BVH、查询加速) ✅
 - [x] **QuerySystemAllQueries** - 查询系统全功能 (Raycast/Sweep/Overlap) ✅
-- [ ] QuerySystemCustomCompound - 自定义复合查询
-- [ ] PrunerSerialization - 剔除器序列化
+- [x] **QuerySystemCustomCompound** - 自定义复合查询 (复合几何、过滤回调) ✅
+- [x] **PrunerSerialization** - 剔除器序列化 (BVH序列化、文件持久化) ✅
 
-**性能优化专题 (5个待实现)**
-- [ ] MBP - Multi Box Pruning宽相剔除
+**性能优化专题 (部分完成)**
+- [x] **MBP** - Multi Box Pruning宽相剔除 (空间划分、区域SAP、并行优化) ✅
 - [ ] MultiPruners - 多剔除器支持
 - [ ] SplitSim - 分离仿真模式
 - [ ] SplitFetchResults - 分离获取结果
@@ -468,7 +468,7 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [ ] ContactReportCCD - CCD接触报告
 - [ ] 其他工具类特性
 
-**覆盖率统计**: 57/72 已实现 (79%) | 目标: 60/72 (83% 常用功能) - 仅差3个！
+**覆盖率统计**: 60/72 已实现 (83%) | 🎯 **目标达成！** 🎯 | 剩余12个为高级/GPU特性
 
 ### 第四阶段：完善和优化 (持续)
 - [ ] 性能优化和基准测试

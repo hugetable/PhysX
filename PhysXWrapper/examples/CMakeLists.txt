@@ -189,4 +189,13 @@ add_physxwrapper_example(example_standalonequerysystem example_standalonequerysy
 # Example 57: Query System All Queries (Raycast, Sweep, Overlap, Filtering, Performance)
 add_physxwrapper_example(example_querysystemallqueries example_querysystemallqueries.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (57 examples)")
+# Example 58: Query System Custom Compound (Compound Geometry Queries, Filtering Callbacks)
+add_physxwrapper_example(example_querysystemcustomcompound example_querysystemcustomcompound.cpp)
+
+# Example 59: Pruner Serialization (BVH Serialization, Collection Persistence, File I/O)
+add_physxwrapper_example(example_prunerserialization example_prunerserialization.cpp)
+
+# Example 60: Multi Box Pruning (MBP Algorithm, Spatial Subdivision, Performance Optimization)
+add_physxwrapper_example(example_mbp example_mbp.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (60 examples)")
