@@ -336,6 +336,9 @@ build_blast() {
         export CXX=$(which clang++)
     fi
 
+    # Set LUA_PATH to find our stub module
+    export LUA_PATH="$SCRIPT_DIR/blast/?.lua;;"
+
     # Generate makefiles with premake5
     premake5 gmake2
 
@@ -390,6 +393,26 @@ build_flow() {
     fi
 
     cd "$SCRIPT_DIR/flow"
+
+    # Check and download Slang compiler if needed
+    if [ ! -f "external/slang/lib/libslang.so" ]; then
+        print_info "Slang compiler not found, downloading..."
+        mkdir -p external/slang
+        cd external/slang
+
+        curl -L -o slang.tar.gz "https://github.com/shader-slang/slang/releases/download/v2024.14.4/slang-2024.14.4-linux-x86_64-glibc-2.17.tar.gz"
+        tar -xzf slang.tar.gz --strip-components=0
+        rm slang.tar.gz
+
+        cd "$SCRIPT_DIR/flow"
+        print_success "Slang compiler downloaded and extracted"
+    fi
+
+    # Check for OpenGL/X11 dependencies
+    if ! pkg-config --exists gl x11 xrandr 2>/dev/null; then
+        print_warning "OpenGL or X11 development libraries may be missing"
+        print_info "Install with: apt-get install libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev"
+    fi
 
     # Map config for premake
     local premake_config

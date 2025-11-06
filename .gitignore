@@ -8,18 +8,32 @@ build_*/
 **/build_*/
 _build/
 _compiler/
+_generated/
 **/_build/
 **/_compiler/
+**/_generated/
 
 # Build tools (auto-downloaded)
 .tools/
 
+# FLOW external dependencies (auto-downloaded)
+flow/external/slang/
+
+# BLAST stub (created by build script)
+blast/omni/
+
 # Binary outputs
 *.so
+*.so.*
 *.a
 *.o
 bin/
 lib/
+
+# Executables
+nvfloweditor
+nvflowshadercompiler
+nvflowshadertool
 
 # CMake generated files
 CMakeCache.txt
