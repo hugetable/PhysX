@@ -198,4 +198,13 @@ add_physxwrapper_example(example_prunerserialization example_prunerserialization
 # Example 60: Multi Box Pruning (MBP Algorithm, Spatial Subdivision, Performance Optimization)
 add_physxwrapper_example(example_mbp example_mbp.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (60 examples)")
+# Example 61: Multiple Pruners (Static/Dynamic Pruner Optimization, Scene Query Performance)
+add_physxwrapper_example(example_multipruners example_multipruners.cpp)
+
+# Example 62: Split Simulation (Asynchronous Physics, CPU Utilization, Double Buffering)
+add_physxwrapper_example(example_splitsim example_splitsim.cpp)
+
+# Example 63: Split Fetch Results (Non-Blocking Fetch, Task Scheduling, Frame Rate Control)
+add_physxwrapper_example(example_splitfetchresults example_splitfetchresults.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (63 examples)")
