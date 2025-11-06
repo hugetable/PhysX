@@ -144,4 +144,13 @@ add_physxwrapper_example(example_deformablesurfaceskinning example_deformablesur
 # Example 42: Deformable Volume Attachment (Soft-Rigid Body Coupling)
 add_physxwrapper_example(example_deformablevolumeattachment example_deformablevolumeattachment.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (42 examples)")
+# Example 43: Deformable Volume Kinematic (Soft-Kinematic Interaction)
+add_physxwrapper_example(example_deformablevolumekinematic example_deformablevolumekinematic.cpp)
+
+# Example 44: Deformable Volume Skinning (Skeletal Soft Body Animation)
+add_physxwrapper_example(example_deformablevolumeskinning example_deformablevolumeskinning.cpp)
+
+# Example 45: Vehicle Direct Drive (Electric/Direct Torque Vehicle)
+add_physxwrapper_example(example_vehicledirectdrive example_vehicledirectdrive.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (45 examples)")
