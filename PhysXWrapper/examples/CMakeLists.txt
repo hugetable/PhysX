@@ -180,4 +180,13 @@ add_physxwrapper_example(example_customgeometryqueries example_customgeometryque
 # Example 54: Custom Convex (Custom Convex Hull, Support Mapping, Mass Properties)
 add_physxwrapper_example(example_customconvex example_customconvex.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (54 examples)")
+# Example 55: Standalone Broadphase (AABB Manager, SAP Algorithm, Incremental Updates)
+add_physxwrapper_example(example_standalonebroadphase example_standalonebroadphase.cpp)
+
+# Example 56: Standalone Query System (BVH Construction, Raycast, Overlap Queries)
+add_physxwrapper_example(example_standalonequerysystem example_standalonequerysystem.cpp)
+
+# Example 57: Query System All Queries (Raycast, Sweep, Overlap, Filtering, Performance)
+add_physxwrapper_example(example_querysystemallqueries example_querysystemallqueries.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (57 examples)")
