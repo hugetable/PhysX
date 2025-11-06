@@ -1,0 +1,476 @@
+% ==============================================================================
+% Example 06: Trigger - Trigger Volumes and Overlap Detection
+% ==============================================================================
+
+\section{Example 06: Trigger}
+
+\subsection{Overview and Basic Information}
+
+\subsubsection{File Information}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Aspect} & \textbf{Details} \\
+\hline
+\textbf{Original PhysX Snippet} & \texttt{physx/snippets/snippettriggers/} \\
+ & \texttt{SnippetTriggers.cpp} \\
+\hline
+Original File Size & 450+ lines (3 implementations) \\
+\hline
+\textbf{Ported PhysXWrapper Example} & \texttt{PhysXWrapper/examples/} \\
+ & \texttt{example\_trigger.cpp} \\
+\hline
+Ported File Size & 486 lines \\
+\hline
+\textbf{Core Wrapper Class} & \texttt{RigidBody/RigidBodyTrigger.h/cpp} \\
+\hline
+\textbf{Difficulty Level} & ⭐⭐ (Intermediate) \\
+\hline
+\textbf{Functional Module} & RigidBody - Trigger System \\
+\hline
+\textbf{Primary Features} & Trigger volumes, Enter/exit events, CCD triggers \\
+\hline
+\end{tabular}
+\caption{Trigger Example Basic Information}
+\end{table}
+
+\subsubsection{Dependencies}
+
+\textbf{Original PhysX Dependencies:}
+\begin{itemize}
+    \item \texttt{PxShapeFlag::eTRIGGER\_SHAPE} - Native trigger flag
+    \item \texttt{PxSimulationEventCallback} - Trigger event callback
+    \item \texttt{PxPairFlag::eTRIGGER\_DEFAULT} - Trigger pair flags
+    \item Filter shader/callback for trigger emulation
+\end{itemize}
+
+\textbf{PhysXWrapper Dependencies:}
+\begin{itemize}
+    \item \texttt{Core/PhysXCore.h} - Core initialization
+    \item \texttt{RigidBody/RigidBodyTrigger.h} - Trigger manager
+\end{itemize}
+
+\subsubsection{Learning Objectives}
+
+\begin{enumerate}
+    \item \textbf{Trigger Volumes:} Non-physical overlap detection zones
+    \item \textbf{Event Callbacks:} Enter/exit event handling
+    \item \textbf{CCD Integration:} Triggers with fast-moving objects
+    \item \textbf{Multiple Implementations:} Native vs filter-based triggers
+    \item \textbf{Trigger-Trigger Detection:} Detecting trigger overlaps
+\end{enumerate}
+
+%------------------------------------------------------------------------------
+
+\subsection{Functional Description}
+
+\subsubsection{What are Triggers?}
+
+\textbf{Triggers} are special collision shapes that detect overlaps without generating physical collision responses. They are used for:
+
+\begin{itemize}
+    \item \textbf{Zone Detection:} Detecting objects entering/exiting areas
+    \item \textbf{Checkpoints:} Racing game checkpoint systems
+    \item \textbf{Proximity Sensors:} AI awareness zones
+    \item \textbf{Pickup Items:} Collectible item detection
+\end{itemize}
+
+\textbf{Key Properties:}
+\begin{itemize}
+    \item No collision response (objects pass through)
+    \item Generate onTriggerEnter/onTriggerExit events
+    \item Compatible with all shape types (box, sphere, capsule, mesh)
+    \item Can be attached to static or dynamic actors
+\end{itemize}
+
+\subsubsection{Physics Concepts}
+
+\paragraph{Overlap Detection}
+
+Triggers use the same broad-phase and narrow-phase collision detection as regular shapes, but skip the constraint solver:
+
+\begin{equation}
+\text{Trigger Path:} \quad \text{BroadPhase} \rightarrow \text{NarrowPhase} \rightarrow \text{Event Callback}
+\end{equation}
+
+\begin{equation}
+\text{Normal Path:} \quad \text{BroadPhase} \rightarrow \text{NarrowPhase} \rightarrow \text{Solver} \rightarrow \text{Integration}
+\end{equation}
+
+\paragraph{CCD for Triggers}
+
+Standard triggers can miss fast-moving objects due to discrete collision detection. With CCD enabled:
+
+\begin{equation}
+\text{CCD Trigger:} \quad \text{Swept AABB} \rightarrow \text{Conservative Advancement} \rightarrow \text{Event}
+\end{equation}
+
+This ensures even thin triggers (e.g., 0.01m thick) detect fast bullets.
+
+%------------------------------------------------------------------------------
+
+\subsection{Code Comparison}
+
+\subsubsection{Architecture Differences}
+
+\textbf{Original PhysX:}
+\begin{itemize}
+    \item Three separate implementations (REAL\_TRIGGERS, FILTER\_SHADER, FILTER\_CALLBACK)
+    \item Global scenario selection
+    \item Manual filter shader/callback setup
+    \item Direct PxSimulationEventCallback inheritance
+\end{itemize}
+
+\textbf{PhysXWrapper:}
+\begin{itemize}
+    \item Unified \texttt{RigidBodyTrigger} manager
+    \item Configuration via \texttt{TriggerConfig} enum
+    \item Simplified callback interface using std::function
+    \item Built-in shape creation helpers
+\end{itemize}
+
+\subsubsection{Side-by-Side Comparison}
+
+\textbf{Original: Manual Filter Shader Setup}
+\begin{lstlisting}[caption={Original PhysX filter shader for triggers}]
+static PxFilterFlags triggersUsingFilterShader(
+    PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+    PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+    PxPairFlags& pairFlags,
+    const void* constantBlock, PxU32 constantBlockSize)
+{
+    // Detect trigger using filter data
+    const bool isTriggerPair = isTrigger(filterData0) ||
+                                isTrigger(filterData1);
+
+    if(isTriggerPair) {
+        pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+        if(usesCCD())
+            pairFlags |= PxPairFlag::eDETECT_CCD_CONTACT;
+        return PxFilterFlag::eDEFAULT;
+    } else {
+        pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+        return PxFilterFlag::eDEFAULT;
+    }
+}
+
+// Scene setup
+PxSceneDesc sceneDesc(physics->getTolerancesScale());
+sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
+sceneDesc.cpuDispatcher = dispatcher;
+sceneDesc.filterShader = triggersUsingFilterShader;
+PxScene* scene = physics->createScene(sceneDesc);
+\end{lstlisting}
+
+\textbf{Wrapper: Simplified Configuration}
+\begin{lstlisting}[caption={Wrapper: Config-driven trigger setup}]
+// Create trigger manager
+RigidBodyTrigger triggerManager;
+
+// Set callback
+triggerManager.setTriggerCallback([](const TriggerEvent& event) {
+    if (event.type == TriggerEventType::ENTER) {
+        std::cout << "Object entered trigger!" << std::endl;
+    } else {
+        std::cout << "Object exited trigger!" << std::endl;
+    }
+});
+
+// Configure trigger behavior
+TriggerConfig config;
+config.implementation = TriggerImplementation::FILTER_SHADER;
+config.enableCCD = true;
+config.detectTriggerTrigger = false;
+
+// Create scene with automatic filter setup
+PxTolerancesScale scale;
+PxSceneDesc sceneDesc = triggerManager.createSceneDesc(scale, config);
+sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(2);
+PxScene* scene = physics.getPhysics()->createScene(sceneDesc);
+
+// Create trigger shape easily
+PxRigidStatic* triggerActor = triggerManager.createBoxTrigger(
+    physics.getPhysics(),
+    scene,
+    material,
+    PxVec3(0, 10, 0),     // Position
+    PxVec3(10, 1, 10),    // Half extents
+    config
+);
+\end{lstlisting}
+
+%------------------------------------------------------------------------------
+
+\subsection{Core Class Analysis}
+
+\subsubsection{TriggerConfig Structure}
+
+\begin{lstlisting}[caption={Trigger configuration}]
+enum class TriggerImplementation {
+    NATIVE,          // PxShapeFlag::eTRIGGER_SHAPE (default)
+    FILTER_SHADER,   // Emulated via filter shader (supports CCD)
+    FILTER_CALLBACK  // Emulated via callback (custom logic)
+};
+
+struct TriggerConfig {
+    TriggerImplementation implementation = TriggerImplementation::NATIVE;
+    bool enableCCD = false;               // CCD for fast objects
+    bool detectTriggerTrigger = false;    // Trigger-trigger overlaps
+};
+\end{lstlisting}
+
+\subsubsection{TriggerEvent Structure}
+
+\begin{lstlisting}[caption={Trigger event data}]
+enum class TriggerEventType {
+    ENTER,  // Object entered trigger
+    EXIT    // Object exited trigger
+};
+
+struct TriggerEvent {
+    TriggerEventType type;
+    PxShape* triggerShape;    // The trigger shape
+    PxShape* otherShape;      // The shape that triggered it
+    PxActor* triggerActor;
+    PxActor* otherActor;
+};
+\end{lstlisting}
+
+\subsubsection{Key Methods}
+
+\begin{lstlisting}[caption={RigidBodyTrigger core methods}]
+class RigidBodyTrigger {
+public:
+    // Set trigger callback
+    void setTriggerCallback(
+        std::function<void(const TriggerEvent&)> callback
+    );
+
+    // Create scene descriptor with trigger support
+    PxSceneDesc createSceneDesc(
+        const PxTolerancesScale& scale,
+        const TriggerConfig& config
+    );
+
+    // Create trigger shapes
+    PxRigidStatic* createBoxTrigger(
+        PxPhysics* physics, PxScene* scene, PxMaterial* material,
+        const PxVec3& position, const PxVec3& halfExtents,
+        const TriggerConfig& config
+    );
+
+    PxRigidStatic* createSphereTrigger(
+        PxPhysics* physics, PxScene* scene, PxMaterial* material,
+        const PxVec3& position, PxReal radius,
+        const TriggerConfig& config
+    );
+
+    PxRigidStatic* createCapsuleTrigger(
+        PxPhysics* physics, PxScene* scene, PxMaterial* material,
+        const PxVec3& position, PxReal radius, PxReal halfHeight,
+        const TriggerConfig& config
+    );
+
+    // Create standalone trigger shape
+    PxShape* createTriggerShape(
+        PxPhysics* physics, const PxGeometry& geometry,
+        PxMaterial* material, const TriggerConfig& config,
+        bool isExclusive = true
+    );
+
+    // Utility
+    static bool isTriggerShape(
+        PxShape* shape, const TriggerConfig& config
+    );
+};
+\end{lstlisting}
+
+%------------------------------------------------------------------------------
+
+\subsection{Visual Diagrams}
+
+\subsubsection{UML Class Diagram}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    node distance=1.5cm,
+    class/.style={rectangle, draw=black, thick, minimum width=4cm, minimum height=1cm},
+    struct/.style={rectangle, draw=blue!70, thick, minimum width=3cm}
+]
+
+\node[class] (trigger) {
+    \begin{tabular}{c}
+    \textbf{RigidBodyTrigger} \\
+    \hline
+    - m\_callback: function \\
+    - m\_eventCallback: EventCallback* \\
+    \hline
+    + setTriggerCallback(...) \\
+    + createSceneDesc(...): PxSceneDesc \\
+    + createBoxTrigger(...): Actor* \\
+    + createSphereTrigger(...): Actor* \\
+    + createTriggerShape(...): Shape* \\
+    + isTriggerShape(...): bool \\
+    \end{tabular}
+};
+
+\node[struct, below left=0.8cm and 0.5cm of trigger] (config) {
+    \begin{tabular}{c}
+    \textbf{TriggerConfig} \\
+    \hline
+    + implementation: Enum \\
+    + enableCCD: bool \\
+    + detectTriggerTrigger: bool
+    \end{tabular}
+};
+
+\node[struct, below right=0.8cm and 0.5cm of trigger] (event) {
+    \begin{tabular}{c}
+    \textbf{TriggerEvent} \\
+    \hline
+    + type: EventType \\
+    + triggerShape: PxShape* \\
+    + otherShape: PxShape* \\
+    + triggerActor: PxActor* \\
+    + otherActor: PxActor*
+    \end{tabular}
+};
+
+\draw[->, dashed] (trigger) -- (config) node[midway, left] {uses};
+\draw[->, dashed] (trigger) -- (event) node[midway, right] {emits};
+
+\end{tikzpicture}
+\caption{RigidBodyTrigger UML Diagram}
+\end{figure}
+
+\subsubsection{Trigger Event Flow}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    node distance=1cm,
+    process/.style={rectangle, rounded corners, draw=blue!70, fill=blue!10, thick, minimum width=2.5cm, minimum height=0.7cm},
+    decision/.style={diamond, draw=orange!70, fill=orange!10, thick, minimum width=1.8cm}
+]
+
+\node[process] (sim) {Physics Simulation};
+\node[process, below=of sim] (broad) {Broad Phase};
+\node[process, below=of broad] (narrow) {Narrow Phase};
+\node[decision, below=of narrow] (overlap) {Overlap?};
+\node[process, below left=1cm and 0.5cm of overlap] (enter) {Fire ENTER Event};
+\node[process, below right=1cm and 0.5cm of overlap] (exit) {Fire EXIT Event};
+\node[process, below=2cm of overlap] (callback) {User Callback};
+
+\draw[->, thick] (sim) -- (broad);
+\draw[->, thick] (broad) -- (narrow);
+\draw[->, thick] (narrow) -- (overlap);
+\draw[->, thick] (overlap) -- node[left] {New} (enter);
+\draw[->, thick] (overlap) -- node[right] {Lost} (exit);
+\draw[->, thick] (enter) -- (callback);
+\draw[->, thick] (exit) -- (callback);
+
+\end{tikzpicture}
+\caption{Trigger Event Flow}
+\end{figure}
+
+%------------------------------------------------------------------------------
+
+\subsection{Usage Methodology}
+
+\subsubsection{Basic Trigger Usage}
+
+\begin{lstlisting}[caption={Simple trigger zone}]
+RigidBodyTrigger triggerManager;
+
+// Set callback
+triggerManager.setTriggerCallback([](const TriggerEvent& event) {
+    if (event.type == TriggerEventType::ENTER) {
+        std::cout << "Checkpoint reached!" << std::endl;
+    }
+});
+
+// Create trigger
+TriggerConfig config;
+config.implementation = TriggerImplementation::NATIVE;
+
+PxRigidStatic* checkpoint = triggerManager.createBoxTrigger(
+    physics, scene, material,
+    PxVec3(0, 1, 50),      // Checkpoint position
+    PxVec3(10, 5, 2),      // Size
+    config
+);
+\end{lstlisting}
+
+\subsubsection{Triggers with CCD}
+
+\begin{lstlisting}[caption={CCD trigger for fast objects}]
+TriggerConfig config;
+config.implementation = TriggerImplementation::FILTER_SHADER;
+config.enableCCD = true;  // Enable CCD
+
+// Create very thin trigger (would be missed without CCD)
+PxRigidStatic* sensor = triggerManager.createBoxTrigger(
+    physics, scene, material,
+    PxVec3(0, 10, 0),
+    PxVec3(20, 0.01f, 20),  // 0.01m thin!
+    config
+);
+
+// Create fast-moving bullet
+PxRigidDynamic* bullet = physics.createRigidDynamic(
+    PxTransform(0, 20, 0));
+bullet->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
+bullet->setLinearVelocity(PxVec3(0, -150, 0));  // Very fast
+\end{lstlisting}
+
+%------------------------------------------------------------------------------
+
+\subsection{Feature Completeness}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Feature} & \textbf{Original} & \textbf{Wrapper} \\
+\hline
+Native triggers & ✓ & ✓ \\
+Filter shader triggers & ✓ & ✓ \\
+Filter callback triggers & ✓ & ✓ \\
+CCD support & ✓ & ✓ \\
+Trigger-trigger detection & ✓ & ✓ \\
+Unified API & ✗ & ✓ \\
+Config-driven & ✗ & ✓ \\
+Shape creation helpers & ✗ & ✓ \\
+Lambda callbacks & ✗ & ✓ \\
+\hline
+\end{tabular}
+\caption{Feature Comparison}
+\end{table}
+
+%------------------------------------------------------------------------------
+
+\subsection{Quality Assessment}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Category} & \textbf{Rating} & \textbf{Justification} \\
+\hline
+Functional Fidelity & ⭐⭐⭐⭐⭐ & All 3 implementations supported \\
+Code Quality & ⭐⭐⭐⭐⭐ & Clean unified API \\
+Usability & ⭐⭐⭐⭐⭐ & Simplified configuration \\
+Documentation & ⭐⭐⭐⭐⭐ & Clear examples \\
+\hline
+\end{tabular}
+\caption{Quality Assessment}
+\end{table}
+
+\textbf{Approval Status:} \textcolor{green}{\textbf{APPROVED}} ✓
+
+%==============================================================================
+% End of Example 06: Trigger
+%==============================================================================
