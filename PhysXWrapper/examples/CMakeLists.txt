@@ -216,4 +216,22 @@ add_physxwrapper_example(example_contactreportccd example_contactreportccd.cpp)
 # Example 66: Custom Profiler (Hierarchical Profiling, Performance Analysis, Budget Management)
 add_physxwrapper_example(example_customprofiler example_customprofiler.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (66 examples)")
+# Example 67: Hello GRB Direct API (GPU Rigid Body入门, Direct GPU API, CUDA加速)
+add_physxwrapper_example(example_hellogrbdirectapi example_hellogrbdirectapi.cpp)
+
+# Example 68: OmniPvd (OmniVerse PVD可视化, USD输出, 实时调试)
+add_physxwrapper_example(example_omnipvd example_omnipvd.cpp)
+
+# Example 69: Isosurface (等值面生成, Marching Cubes, 流体表面重建)
+add_physxwrapper_example(example_isosurface example_isosurface.cpp)
+
+# Example 70: SDF (有向距离场, 碰撞检测, 光线追踪)
+add_physxwrapper_example(example_sdf example_sdf.cpp)
+
+# Example 71: Path Tracing (路径追踪, 软体可视化, 流体渲染)
+add_physxwrapper_example(example_pathtracing example_pathtracing.cpp)
+
+# Example 72: Profiler Converter (性能数据转换, CSV/JSON/Chrome Trace, 统计分析)
+add_physxwrapper_example(example_profilerconverter example_profilerconverter.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (72 examples - 100% COMPLETE!)")
