@@ -153,4 +153,13 @@ add_physxwrapper_example(example_deformablevolumeskinning example_deformablevolu
 # Example 45: Vehicle Direct Drive (Electric/Direct Torque Vehicle)
 add_physxwrapper_example(example_vehicledirectdrive example_vehicledirectdrive.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (45 examples)")
+# Example 46: Vehicle Tank Drive (Tracked Vehicle / Differential Steering)
+add_physxwrapper_example(example_vehicletankdrive example_vehicletankdrive.cpp)
+
+# Example 47: Vehicle Truck (Multi-Axle Heavy Duty Vehicle)
+add_physxwrapper_example(example_vehicletruck example_vehicletruck.cpp)
+
+# Example 48: Vehicle Custom Suspension (Adaptive/Active/Air Suspension)
+add_physxwrapper_example(example_vehiclecustomsuspension example_vehiclecustomsuspension.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (48 examples)")
