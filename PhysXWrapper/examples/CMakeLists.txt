@@ -171,4 +171,13 @@ add_physxwrapper_example(example_vehiclemultithreading example_vehiclemultithrea
 # Example 51: Custom Geometry (Ellipsoid Custom Geometry Implementation)
 add_physxwrapper_example(example_customgeometry example_customgeometry.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (51 examples)")
+# Example 52: Custom Geometry Collision (GJK/EPA Algorithm, Minkowski Difference)
+add_physxwrapper_example(example_customgeometrycollision example_customgeometrycollision.cpp)
+
+# Example 53: Custom Geometry Queries (Raycast, Sweep, Overlap, Closest Point)
+add_physxwrapper_example(example_customgeometryqueries example_customgeometryqueries.cpp)
+
+# Example 54: Custom Convex (Custom Convex Hull, Support Mapping, Mass Properties)
+add_physxwrapper_example(example_customconvex example_customconvex.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (54 examples)")
