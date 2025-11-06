@@ -117,4 +117,13 @@ add_physxwrapper_example(example_rackjoint example_rackjoint.cpp)
 # Example 33: Mimic Joint (Follower Joint, Robotic Grippers, Coupled Motions)
 add_physxwrapper_example(example_mimicjoint example_mimicjoint.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (33 examples)")
+# Example 34: Fixed Tendon (Articulation Tendon Coupling, Cable-Driven Mechanisms)
+add_physxwrapper_example(example_fixedtendon example_fixedtendon.cpp)
+
+# Example 35: Spatial Tendon (3D Cable Routing, Pulley Systems, Tendon-Driven Robots)
+add_physxwrapper_example(example_spatialtendon example_spatialtendon.cpp)
+
+# Example 36: Immediate Mode Articulation (Direct FK/ID Computation, Predictive Control)
+add_physxwrapper_example(example_immediatearticulation example_immediatearticulation.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (36 examples)")
