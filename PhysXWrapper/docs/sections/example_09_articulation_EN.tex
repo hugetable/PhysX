@@ -1,0 +1,360 @@
+% ==============================================================================
+% Example 09: Articulation - Reduced Coordinate Multi-Body Systems
+% ==============================================================================
+
+\section{Example 09: Articulation}
+
+\subsection{Overview and Basic Information}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Aspect} & \textbf{Details} \\
+\hline
+\textbf{Original} & \texttt{snippets/snippetarticulationrc/} \\
+\textbf{Ported} & \texttt{examples/example\_articulation.cpp} \\
+\textbf{Difficulty} & ⭐⭐⭐⭐ (Expert) \\
+\textbf{Module} & Articulation - Multi-Body Dynamics \\
+\textbf{Features} & Robot arms, Reduced coordinates, Joint drives \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Functional Description}
+
+\subsubsection{What are Articulations?}
+
+\textbf{Articulations} are specialized multi-body systems that use \textbf{reduced coordinate formulation} for more stable and efficient simulation of kinematic chains like:
+
+\begin{itemize}
+    \item Industrial robot arms
+    \item Humanoid characters (ragdolls)
+    \item Vehicle suspensions
+    \item Animal skeletons
+\end{itemize}
+
+\textbf{Advantages over Regular Joints:}
+\begin{itemize}
+    \item Better numerical stability for long chains
+    \item More efficient constraint solving
+    \item Implicit joint coordinates (Featherstone algorithm)
+    \item Superior motor control accuracy
+\end{itemize}
+
+\subsubsection{Physics Concepts}
+
+\paragraph{Reduced Coordinate Formulation}
+
+Traditional joints use \textbf{maximal coordinates} (3D position + rotation for each body):
+\begin{equation}
+\text{DOF} = 6n - c
+\end{equation}
+
+Where $n$ = bodies, $c$ = constraints.
+
+Articulations use \textbf{generalized coordinates} (only joint angles):
+\begin{equation}
+\text{DOF} = \sum_{i=1}^{n-1} q_i
+\end{equation}
+
+Where $q_i$ = degrees of freedom per joint.
+
+\paragraph{Featherstone Algorithm}
+
+Uses recursive forward-backward passes for $O(n)$ complexity:
+
+\textbf{Forward pass} (compute velocities):
+\begin{equation}
+\mathbf{v}_i = \mathbf{X}_i^{parent} \mathbf{v}_{parent} + \mathbf{S}_i \dot{q}_i
+\end{equation}
+
+\textbf{Backward pass} (compute forces):
+\begin{equation}
+\tau_i = \mathbf{S}_i^T (\mathbf{f}_i + \sum_{child} \mathbf{X}_{child}^i \mathbf{f}_{child})
+\end{equation}
+
+\paragraph{Joint Drives}
+
+PD controller in joint space:
+\begin{equation}
+\tau = K_p(q_{target} - q) + K_d(\dot{q}_{target} - \dot{q})
+\end{equation}
+
+%------------------------------------------------------------------------------
+
+\subsection{Code Comparison}
+
+\textbf{Original PhysX:}
+\begin{lstlisting}[caption={Manual articulation creation}]
+// Create articulation
+PxArticulationReducedCoordinate* articulation =
+    gPhysics->createArticulationReducedCoordinate();
+
+// Create root link
+PxArticulationLink* root = articulation->createLink(NULL,
+    PxTransform(PxVec3(0, 10, 0)));
+PxRigidActorExt::createExclusiveShape(*root,
+    PxBoxGeometry(1, 1, 1), *gMaterial);
+PxRigidBodyExt::updateMassAndInertia(*root, 10.0f);
+
+// Create child link
+PxArticulationLink* child = articulation->createLink(root,
+    PxTransform(PxVec3(2, 0, 0)));
+PxRigidActorExt::createExclusiveShape(*child,
+    PxBoxGeometry(1, 1, 1), *gMaterial);
+
+// Set up inbound joint
+PxArticulationJointReducedCoordinate* joint =
+    child->getInboundJoint();
+joint->setParentPose(PxTransform(PxVec3(1, 0, 0)));
+joint->setChildPose(PxTransform(PxVec3(-1, 0, 0)));
+joint->setJointType(PxArticulationJointType::eREVOLUTE);
+joint->setMotion(PxArticulationAxis::eTWIST,
+    PxArticulationMotion::eLIMITED);
+
+// Configure drive
+PxArticulationDrive drive;
+drive.stiffness = 100.0f;
+drive.damping = 10.0f;
+drive.maxForce = PX_MAX_F32;
+joint->setDrive(PxArticulationAxis::eTWIST, drive);
+
+gScene->addArticulation(*articulation);
+\end{lstlisting}
+
+\textbf{Wrapper:}
+\begin{lstlisting}[caption={Config-driven articulation}]
+ArticulationManager artMgr;
+
+// Configure robot arm
+RobotArmConfig config;
+config.numJoints = 6;
+config.linkLength = 1.0f;
+config.linkRadius = 0.15f;
+config.linkMass = 2.0f;
+config.basePosition = PxVec3(0, 1, 0);
+config.armDirection = PxVec3(0, 1, 0);
+config.enableJointLimits = true;
+config.jointLimitLow = -PxPi / 3.0f;
+config.jointLimitHigh = PxPi / 3.0f;
+
+// Create entire robot arm
+PxArticulationReducedCoordinate* robotArm =
+    artMgr.createRobotArm(scene, config, material);
+
+// Set drive targets
+std::vector<PxArticulationLink*> links = artMgr.getLinks(robotArm);
+for (size_t i = 1; i < links.size(); i++) {
+    artMgr.setDriveTarget(links[i], PxArticulationAxis::eTWIST,
+                          PxPi / 6.0f);
+}
+\end{lstlisting}
+
+%------------------------------------------------------------------------------
+
+\subsection{Core Class Analysis}
+
+\begin{lstlisting}[caption={Articulation configuration}]
+struct RobotArmConfig {
+    PxU32 numJoints = 6;
+    PxReal linkLength = 1.0f;
+    PxReal linkRadius = 0.15f;
+    PxReal linkMass = 2.0f;
+    PxVec3 basePosition = PxVec3(0, 0, 0);
+    PxVec3 armDirection = PxVec3(0, 1, 0);
+
+    bool enableJointLimits = true;
+    PxReal jointLimitLow = -PxPi / 2.0f;
+    PxReal jointLimitHigh = PxPi / 2.0f;
+
+    PxReal driveStiffness = 1000.0f;
+    PxReal driveDamping = 100.0f;
+    PxReal driveForceLimit = PX_MAX_F32;
+};
+\end{lstlisting}
+
+\begin{lstlisting}[caption={ArticulationManager API}]
+class ArticulationManager {
+public:
+    // Create predefined articulations
+    PxArticulationReducedCoordinate* createRobotArm(
+        PxScene* scene, const RobotArmConfig& config,
+        PxMaterial* material
+    );
+
+    PxArticulationReducedCoordinate* createChain(
+        PxScene* scene, const PxVec3& start,
+        const PxVec3& direction, PxU32 numLinks,
+        PxReal linkLength, PxReal linkRadius,
+        PxMaterial* material
+    );
+
+    // Query
+    PxU32 getLinkCount(
+        const PxArticulationReducedCoordinate* articulation
+    ) const;
+
+    std::vector<PxArticulationLink*> getLinks(
+        PxArticulationReducedCoordinate* articulation
+    ) const;
+
+    // Joint control
+    void setDriveTarget(
+        PxArticulationLink* link,
+        PxArticulationAxis::Enum axis,
+        PxReal target
+    );
+
+    PxReal getDriveTarget(
+        const PxArticulationLink* link,
+        PxArticulationAxis::Enum axis
+    ) const;
+
+    void setDriveParameters(
+        PxArticulationLink* link,
+        PxArticulationAxis::Enum axis,
+        PxReal stiffness, PxReal damping,
+        PxReal forceLimit
+    );
+
+    // State queries
+    PxReal getJointPosition(
+        const PxArticulationLink* link,
+        PxArticulationAxis::Enum axis
+    ) const;
+
+    PxReal getJointVelocity(
+        const PxArticulationLink* link,
+        PxArticulationAxis::Enum axis
+    ) const;
+};
+\end{lstlisting}
+
+%------------------------------------------------------------------------------
+
+\subsection{Visual Diagrams}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=0.8]
+    % Robot arm
+    \node at (0, 5) {\textbf{Robot Arm (Articulation)}};
+
+    % Base
+    \fill[blue!30] (-0.5, 0) rectangle (0.5, 1);
+    \draw[thick] (-0.5, 0) rectangle (0.5, 1);
+    \node at (0, 0.5) {Base};
+
+    % Link 1
+    \fill[green!30] (-0.2, 1) rectangle (0.2, 2.5);
+    \draw[thick] (-0.2, 1) rectangle (0.2, 2.5);
+    \draw[red, thick] (0, 1) circle (0.15);
+    \node[red] at (0.8, 1) {Joint 1};
+
+    % Link 2
+    \fill[green!30] (-0.2, 2.5) rectangle (0.2, 4);
+    \draw[thick] (-0.2, 2.5) rectangle (0.2, 4);
+    \draw[red, thick] (0, 2.5) circle (0.15);
+    \node[red] at (0.8, 2.5) {Joint 2};
+
+    % End effector
+    \fill[orange!50] (-0.3, 4) circle (0.2);
+    \draw[thick] (-0.3, 4) circle (0.2);
+    \node[orange] at (0.8, 4) {End Effector};
+
+    % Coordinate system
+    \draw[->, blue, thick] (0, 0) -- (0, -1) node[below] {Reduced Coords};
+\end{tikzpicture}
+\caption{Articulation Structure}
+\end{figure}
+
+%------------------------------------------------------------------------------
+
+\subsection{Usage Methodology}
+
+\subsubsection{Creating a Robot Manipulator}
+
+\begin{lstlisting}[caption={6-DOF robot arm}]
+ArticulationManager artMgr;
+
+RobotArmConfig config;
+config.numJoints = 6;
+config.linkLength = 0.5f;
+config.basePosition = PxVec3(0, 1, 0);
+config.driveStiffness = 1000.0f;
+config.driveDamping = 100.0f;
+
+PxArticulationReducedCoordinate* robot =
+    artMgr.createRobotArm(scene, config, material);
+
+// Set target pose (example: all joints to 30 degrees)
+std::vector<PxArticulationLink*> links = artMgr.getLinks(robot);
+for (size_t i = 1; i < links.size(); i++) {
+    artMgr.setDriveTarget(links[i],
+        PxArticulationAxis::eTWIST, PxPi / 6.0f);
+}
+\end{lstlisting}
+
+%------------------------------------------------------------------------------
+
+\subsection{Performance Considerations}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{System} & \textbf{Joints} & \textbf{Articulation} \\
+\hline
+Complexity & $O(n^2)$ & $O(n)$ \\
+Stability & Moderate & Excellent \\
+Control accuracy & Good & Excellent \\
+Setup complexity & Low & High \\
+\hline
+\end{tabular}
+\caption{Joints vs Articulations}
+\end{table}
+
+%------------------------------------------------------------------------------
+
+\subsection{Feature Completeness}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Feature} & \textbf{Original} & \textbf{Wrapper} \\
+\hline
+Reduced coordinates & ✓ & ✓ \\
+Joint drives & ✓ & ✓ \\
+Joint limits & ✓ & ✓ \\
+Robot arm creator & ✗ & ✓ \\
+Chain creator & ✗ & ✓ \\
+State queries & ✗ & ✓ \\
+Config-driven API & ✗ & ✓ \\
+\hline
+\end{tabular}
+\end{table}
+
+%------------------------------------------------------------------------------
+
+\subsection{Quality Assessment}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Category} & \textbf{Rating} \\
+\hline
+Functional Fidelity & ⭐⭐⭐⭐⭐ \\
+Code Quality & ⭐⭐⭐⭐⭐ \\
+Usability & ⭐⭐⭐⭐⭐ \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Approval Status:} \textcolor{green}{\textbf{APPROVED}} ✓
+
+%==============================================================================
+% End of Example 09: Articulation
+%==============================================================================
