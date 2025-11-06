@@ -2,7 +2,7 @@
 
 **Last Updated:** 2025-11-06
 **Total Examples:** 72
-**Completed:** 10/72 (13.9%)
+**Completed:** 14/72 (19.4%)
 **Status:** 🔄 In Progress
 
 ## Documentation Requirements
