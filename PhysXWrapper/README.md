@@ -400,7 +400,7 @@ ctest --output-on-failure > test_results.txt 2>&1
 
 ### 第三阶段：扩展实现 (进行中 - PhysX Snippets完整覆盖)
 
-基于PhysX官方72个Snippets，当前已实现48个(67%)，计划逐步补充剩余24个：
+基于PhysX官方72个Snippets，当前已实现51个(71%)，计划逐步补充剩余21个：
 
 **高优先级与关节系统 (已完成 ✅)**
 - [x] **JointDrive** - D6关节驱动系统 ✅
@@ -426,16 +426,16 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [x] **DeformableVolumeKinematic** - 软体与运动学物体交互 (单向驱动、轨迹控制) ✅
 - [x] **DeformableVolumeSkinning** - 软体蒙皮 (LBS/DQS、骨骼绑定) ✅
 
-**车辆系统扩展 (2个待实现)**
+**车辆系统扩展 (已完成 ✅)**
 - [x] **VehicleDirectDrive** - 直驱车辆 (电动车、直接扭矩控制) ✅
 - [x] **VehicleTankDrive** - 坦克式驱动 (履带车辆、差速转向) ✅
 - [x] **VehicleTruck** - 卡车物理 (多轴、载荷分配、制动系统) ✅
 - [x] **VehicleCustomSuspension** - 自定义悬挂 (主动/半主动/气动) ✅
-- [ ] VehicleCustomTire - 自定义轮胎模型
-- [ ] VehicleMultithreading - 多线程车辆
+- [x] **VehicleCustomTire** - 自定义轮胎模型 (Pacejka公式、温度、磨损) ✅
+- [x] **VehicleMultithreading** - 多线程车辆 (并行仿真、Amdahl定律) ✅
 
-**自定义几何/查询 (9个待实现)**
-- [ ] CustomGeometry - 自定义几何类型
+**自定义几何/查询 (8个待实现)**
+- [x] **CustomGeometry** - 自定义几何类型 (椭球体实现) ✅
 - [ ] CustomGeometryCollision - 自定义几何碰撞
 - [ ] CustomGeometryQueries - 自定义几何查询
 - [ ] CustomConvex - 自定义凸几何
@@ -468,7 +468,7 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [ ] ContactReportCCD - CCD接触报告
 - [ ] 其他工具类特性
 
-**覆盖率统计**: 48/72 已实现 (67%) | 目标: 60/72 (83% 常用功能)
+**覆盖率统计**: 51/72 已实现 (71%) | 目标: 60/72 (83% 常用功能)
 
 ### 第四阶段：完善和优化 (持续)
 - [ ] 性能优化和基准测试

@@ -162,4 +162,13 @@ add_physxwrapper_example(example_vehicletruck example_vehicletruck.cpp)
 # Example 48: Vehicle Custom Suspension (Adaptive/Active/Air Suspension)
 add_physxwrapper_example(example_vehiclecustomsuspension example_vehiclecustomsuspension.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (48 examples)")
+# Example 49: Vehicle Custom Tire (Tire Models: Pacejka, Temperature, Wear)
+add_physxwrapper_example(example_vehiclecustomtire example_vehiclecustomtire.cpp)
+
+# Example 50: Vehicle Multithreading (Parallel Vehicle Simulation)
+add_physxwrapper_example(example_vehiclemultithreading example_vehiclemultithreading.cpp)
+
+# Example 51: Custom Geometry (Ellipsoid Custom Geometry Implementation)
+add_physxwrapper_example(example_customgeometry example_customgeometry.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (51 examples)")
