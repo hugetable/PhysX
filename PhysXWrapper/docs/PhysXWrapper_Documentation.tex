@@ -1,0 +1,159 @@
+% PhysXWrapper Technical Documentation
+% Author: PhysX Wrapper Project
+% Date: 2025-11-06
+
+\documentclass[12pt,a4paper]{report}
+
+% 包导入
+\usepackage[UTF8]{ctex}  % 中文支持
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{tocloft}
+
+% TikZ库
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, shadows, decorations.pathreplacing}
+
+% 页面设置
+\geometry{left=3cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+% 代码高亮设置
+\lstdefinestyle{cpp}{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!60!black}\itshape,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    backgroundcolor=\color{gray!10},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{black!30},
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    escapeinside={\%*}{*)},
+    xleftmargin=2em,
+    xrightmargin=2em,
+    aboveskip=1em,
+    belowskip=1em
+}
+
+\lstset{style=cpp}
+
+% 超链接设置
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=green,
+    pdftitle={PhysXWrapper Technical Documentation},
+    pdfauthor={PhysX Wrapper Project},
+    pdfsubject={Physics Engine Wrapper},
+    pdfkeywords={PhysX, Physics, C++, API}
+}
+
+% 页眉页脚
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{PhysXWrapper}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% 标题页设置
+\title{
+    \vspace{2cm}
+    \Huge \textbf{PhysXWrapper} \\
+    \vspace{0.5cm}
+    \LARGE 技术文档与API参考手册 \\
+    \vspace{0.3cm}
+    \Large Technical Documentation \& API Reference \\
+    \vspace{2cm}
+}
+\author{
+    PhysX Wrapper Project Team \\
+    \vspace{0.5cm}
+    \texttt{基于 NVIDIA PhysX 5.6.1}
+}
+\date{\today}
+
+\begin{document}
+
+% 标题页
+\maketitle
+\thispagestyle{empty}
+
+% 摘要
+\newpage
+\begin{abstract}
+\noindent
+PhysXWrapper是对NVIDIA PhysX物理引擎的高级C++封装库，旨在简化PhysX的使用，提供更加友好和易用的接口。本文档详细记录了PhysXWrapper的架构设计、API参考、示例程序库、代码移植对比以及性能分析。
+
+\vspace{1em}
+\noindent
+\textbf{主要特性：}
+\begin{itemize}
+    \item 完整实现72个PhysX官方Snippets (100\%覆盖率)
+    \item 模块化设计，支持刚体、软体、流体、车辆等
+    \item RAII资源管理，自动生命周期控制
+    \item 详细的中文注释和理论背景
+    \item 完善的单元测试和集成测试
+\end{itemize}
+
+\vspace{1em}
+\noindent
+\textbf{文档版本：} 1.0 \\
+\textbf{最后更新：} \today \\
+\textbf{PhysX版本：} 5.6.1 \\
+\textbf{C++标准：} C++17
+\end{abstract}
+
+% 目录
+\newpage
+\tableofcontents
+
+% 图表目录
+\newpage
+\listoffigures
+\listoftables
+
+% 正文章节
+\newpage
+\input{chapters/01_introduction}
+\input{chapters/02_api_reference}
+\input{chapters/03_example_library}
+\input{chapters/04_code_comparison}
+\input{chapters/05_architecture}
+\input{chapters/06_performance}
+
+% 附录
+\appendix
+\input{chapters/appendix_build}
+\input{chapters/appendix_troubleshooting}
+
+% 参考文献
+\begin{thebibliography}{99}
+\bibitem{physx} NVIDIA Corporation. \textit{PhysX SDK Documentation}. 2024.
+\bibitem{physx_guide} NVIDIA Corporation. \textit{PhysX Programming Guide}. 2024.
+\bibitem{snippets} NVIDIA Corporation. \textit{PhysX Snippets Collection}. 2024.
+\bibitem{cpp17} ISO/IEC 14882:2017. \textit{Programming Languages - C++}. 2017.
+\end{thebibliography}
+
+\end{document}
