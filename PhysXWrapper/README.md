@@ -400,7 +400,7 @@ ctest --output-on-failure > test_results.txt 2>&1
 
 ### 第三阶段：扩展实现 (进行中 - PhysX Snippets完整覆盖)
 
-基于PhysX官方72个Snippets，当前已实现36个(50%)，计划逐步补充剩余36个：
+基于PhysX官方72个Snippets，当前已实现39个(54%)，计划逐步补充剩余33个：
 
 **高优先级与关节系统 (已完成 ✅)**
 - [x] **JointDrive** - D6关节驱动系统 ✅
@@ -416,10 +416,10 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [x] **SpatialTendon** - 空间肌腱 (3D钢索路径、滑轮系统) ✅
 - [x] **ImmediateArticulation** - 即时模式关节链 (FK/ID直接计算) ✅
 
-**软体/流体扩展 (8个待实现)**
-- [ ] PBDCloth - PBD布料模拟
-- [ ] PBDInflatable - PBD充气物体
-- [ ] DeformableMesh - 可变形网格
+**软体/流体扩展 (5个待实现)**
+- [x] **PBDCloth** - PBD布料模拟 (GPU加速粒子布料) ✅
+- [x] **PBDInflatable** - PBD充气物体 (体积约束、压力模拟) ✅
+- [x] **DeformableMesh** - 可变形网格 (FEM有限元、弹性材料) ✅
 - [ ] DeformableSurface - 可变形表面
 - [ ] DeformableSurfaceSkinning - 可变形表面蒙皮
 - [ ] DeformableVolumeAttachment - 软体附着到刚体

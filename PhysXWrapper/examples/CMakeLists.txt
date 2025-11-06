@@ -126,4 +126,13 @@ add_physxwrapper_example(example_spatialtendon example_spatialtendon.cpp)
 # Example 36: Immediate Mode Articulation (Direct FK/ID Computation, Predictive Control)
 add_physxwrapper_example(example_immediatearticulation example_immediatearticulation.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (36 examples)")
+# Example 37: PBD Cloth (Position-Based Dynamics Cloth, GPU-Accelerated)
+add_physxwrapper_example(example_pbdcloth example_pbdcloth.cpp)
+
+# Example 38: PBD Inflatable (Volume Constraints, Pressure Simulation, Balloons)
+add_physxwrapper_example(example_pbdinflatable example_pbdinflatable.cpp)
+
+# Example 39: Deformable Mesh (FEM Soft Bodies, Tetrahedral Mesh, Elastic Materials)
+add_physxwrapper_example(example_deformablemesh example_deformablemesh.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (39 examples)")
