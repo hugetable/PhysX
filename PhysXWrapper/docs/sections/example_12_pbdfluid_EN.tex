@@ -1,0 +1,35 @@
+\section{Example 12: PBDFluid}
+\subsection{Overview}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Original} & SnippetPBDFluid \\
+\textbf{Ported} & example\_pbdfluid.cpp \\
+\textbf{Difficulty} & ⭐⭐⭐⭐⭐ (Expert) \\
+\textbf{Module} & Fluid - Position Based Dynamics \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Description}
+\textbf{PBD Fluids} simulate particle-based fluids using Position Based Dynamics on GPU. Applications: water simulation, liquid effects, SPH fluids.
+
+\subsubsection{Physics: PBD Solver}
+Iterative constraint projection:
+\begin{equation}
+\mathbf{x}_{i+1} = \mathbf{x}_i + \Delta\mathbf{x}_i, \quad \Delta\mathbf{x}_i = \frac{\lambda_i}{\sum m_j} \nabla C_i
+\end{equation}
+
+\subsection{Core API}
+\begin{lstlisting}
+class PBDFluidManager {
+public:
+    PxPBDParticleSystem* createFluidSystem(
+        PxScene* scene, PxCudaContextManager* cuda,
+        const PBDFluidConfig& config);
+};
+\end{lstlisting}
+
+\subsection{Quality Assessment}
+\textbf{Rating:} ⭐⭐⭐⭐⭐ \quad \textbf{Status:} \textcolor{green}{\textbf{APPROVED}} ✓

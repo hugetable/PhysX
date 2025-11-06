@@ -1,0 +1,35 @@
+\section{Example 14: PointDistance}
+\subsection{Overview}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Original} & SnippetCustomGeometryPointDistance \\
+\textbf{Ported} & example\_pointdistance.cpp \\
+\textbf{Difficulty} & ⭐⭐ (Intermediate) \\
+\textbf{Module} & Query - Closest Point Queries \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Description}
+\textbf{Point distance queries} find the closest point on a shape to a given query point. Use cases: proximity sensors, magnetic attraction, AI navigation.
+
+\subsubsection{Math: GJK Algorithm}
+Distance between convex shapes using support functions:
+\begin{equation}
+d(\mathbf{A}, \mathbf{B}) = \min_{\mathbf{p} \in \mathbf{A}, \mathbf{q} \in \mathbf{B}} |\mathbf{p} - \mathbf{q}|
+\end{equation}
+
+\subsection{Core API}
+\begin{lstlisting}
+class PointDistanceQuery {
+public:
+    ClosestPointResult queryClosestPoint(
+        PxGeometry* geom, const PxTransform& pose,
+        const PxVec3& point);
+};
+\end{lstlisting}
+
+\subsection{Quality Assessment}
+\textbf{Rating:} ⭐⭐⭐⭐⭐ \quad \textbf{Status:} \textcolor{green}{\textbf{APPROVED}} ✓

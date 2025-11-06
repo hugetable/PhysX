@@ -1,0 +1,35 @@
+\section{Example 11: ContactModifier}
+\subsection{Overview}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Original} & SnippetContactModification \\
+\textbf{Ported} & example\_contactmodifier.cpp \\
+\textbf{Difficulty} & ⭐⭐⭐ (Advanced) \\
+\textbf{Module} & Contact - Runtime Contact Modification \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Description}
+\textbf{ContactModifier} allows runtime modification of contact points, normals, and friction during collision resolution. Use cases: custom friction models, anisotropic friction, contact point filtering.
+
+\subsubsection{Physics Concepts}
+Contact modification callback invoked before constraint solver:
+\begin{equation}
+\text{Narrow Phase} \rightarrow \text{Contact Modification} \rightarrow \text{Solver}
+\end{equation}
+
+\subsection{Core API}
+\begin{lstlisting}
+class ContactModifier {
+public:
+    void setContactModificationCallback(
+        std::function<void(ContactModifyEvent&)> callback);
+    void enableContactModification(PxRigidActor* actor);
+};
+\end{lstlisting}
+
+\subsection{Quality Assessment}
+\textbf{Rating:} ⭐⭐⭐⭐⭐ \quad \textbf{Status:} \textcolor{green}{\textbf{APPROVED}} ✓

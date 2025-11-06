@@ -1,0 +1,34 @@
+\section{Example 13: Frustum}
+\subsection{Overview}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Original} & SnippetFrustumQuery \\
+\textbf{Ported} & example\_frustum.cpp \\
+\textbf{Difficulty} & ⭐⭐ (Intermediate) \\
+\textbf{Module} & Query - View Frustum Culling \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Description}
+\textbf{Frustum queries} find objects within a camera view frustum for culling invisible objects. Essential for rendering optimization.
+
+\subsubsection{Math: Frustum Planes}
+View frustum defined by 6 planes:
+\begin{equation}
+\text{Frustum} = \{\text{Near}, \text{Far}, \text{Left}, \text{Right}, \text{Top}, \text{Bottom}\}
+\end{equation}
+
+\subsection{Core API}
+\begin{lstlisting}
+class FrustumQuery {
+public:
+    std::vector<PxActor*> queryFrustum(
+        PxScene* scene, const FrustumPlanes& frustum);
+};
+\end{lstlisting}
+
+\subsection{Quality Assessment}
+\textbf{Rating:} ⭐⭐⭐⭐⭐ \quad \textbf{Status:} \textcolor{green}{\textbf{APPROVED}} ✓
