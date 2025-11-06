@@ -207,4 +207,13 @@ add_physxwrapper_example(example_splitsim example_splitsim.cpp)
 # Example 63: Split Fetch Results (Non-Blocking Fetch, Task Scheduling, Frame Rate Control)
 add_physxwrapper_example(example_splitfetchresults example_splitfetchresults.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (63 examples)")
+# Example 64: Immediate Mode (Low-Level Physics, Direct Collision Detection, Manual Integration)
+add_physxwrapper_example(example_immediatemode example_immediatemode.cpp)
+
+# Example 65: Contact Report CCD (Continuous Collision Detection, Contact Reporting, Event Callbacks)
+add_physxwrapper_example(example_contactreportccd example_contactreportccd.cpp)
+
+# Example 66: Custom Profiler (Hierarchical Profiling, Performance Analysis, Budget Management)
+add_physxwrapper_example(example_customprofiler example_customprofiler.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (66 examples)")
