@@ -2,7 +2,7 @@
 
 **Last Updated:** 2025-11-06
 **Total Examples:** 72
-**Completed:** 14/72 (19.4%)
+**Completed:** 41/72 (56.9%)
 **Status:** 🔄 In Progress
 
 ## Documentation Requirements
@@ -282,80 +282,131 @@ For **each** of the 72 examples, we need to create a comprehensive LaTeX section
 ### Module 2: Advanced Features (15 examples)
 
 #### Example 15: Debug
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_15_debug_EN.tex`
 - **Core Classes:** DebugDrawer
 
 #### Example 16: BVH
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_16_bvh_EN.tex`
 - **Core Classes:** BVHBuilder
 
 #### Example 17: Gyroscopic
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_17_gyroscopic_EN.tex`
 - **Core Classes:** GyroscopicForces
 
 #### Example 18: Collection
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_18_collection_EN.tex`
 - **Core Classes:** CollectionLoader
 
 #### Example 19: Character
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_19_character_EN.tex`
 - **Core Classes:** CharacterController
 
 #### Example 20: Aggregate
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_20_aggregate_EN.tex`
 - **Core Classes:** AggregateManager
 
 #### Example 21: Vehicle
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_21_vehicle_EN.tex`
 - **Core Classes:** VehicleManager
 
 #### Example 22: Material
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_22_material_EN.tex`
 - **Core Classes:** MaterialLibrary
 
 #### Example 23: Recorder
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_23_recorder_EN.tex`
 - **Core Classes:** PhysicsRecorder
 
 #### Example 24: Profiler
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_24_profiler_EN.tex`
 - **Core Classes:** PerformanceProfiler
 
 #### Example 25: JointDrive
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_25_jointdrive_EN.tex`
 - **Core Classes:** JointManager (D6 drive focus)
 
 #### Example 26: ToleranceScale
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_26_tolerancescale_EN.tex`
 - **Core Classes:** PhysXCore (config focus)
 
 #### Example 27: Stepper
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_27_stepper_EN.tex`
 - **Core Classes:** Custom stepper implementation
 
 #### Example 28: MassProperties
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_28_massproperties_EN.tex`
 - **Core Classes:** RigidBodyMassCalculator
 
 #### Example 29: Multithreading
-- **Status:** ⏳ **PENDING**
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_29_multithreading_EN.tex`
 - **Core Classes:** PhysXCore (dispatcher focus)
 
 ---
 
 ### Module 3: Joint Extensions (12 examples)
 
-#### Example 30-41: Custom Joints & Tendons
-- **Status:** ⏳ **PENDING** (group documentation)
-- Examples:
-  - CustomJoint
-  - GearJoint
-  - RackJoint
-  - MimicJoint
-  - FixedTendon
-  - SpatialTendon
-  - ImmediateArticulation
-  - ... (and 5 more)
+#### Example 30: CustomJoint
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_30_customjoint_EN.tex`
+
+#### Example 31: GearJoint
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_31_gearjoint_EN.tex`
+
+#### Example 32: RackJoint
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_32_rackjoint_EN.tex`
+
+#### Example 33: MimicJoint
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_33_mimicjoint_EN.tex`
+
+#### Example 34: FixedTendon
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_34_fixedtendon_EN.tex`
+
+#### Example 35: SpatialTendon
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_35_spatialtendon_EN.tex`
+
+#### Example 36: ImmediateArticulation
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_36_immediatearticulation_EN.tex`
+
+#### Example 37: ImmediateMode
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_37_immediatemode_EN.tex`
+
+#### Example 38: Collection
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_38_collection_EN.tex`
+
+#### Example 39: PrunerSerialization
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_39_prunerserialization_EN.tex`
+
+#### Example 40: SplitSim
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_40_splitsim_EN.tex`
+
+#### Example 41: SplitFetchResults
+- **Status:** ✅ **COMPLETE**
+- **File:** `docs/sections/example_41_splitfetchresults_EN.tex`
 
 ---
 
