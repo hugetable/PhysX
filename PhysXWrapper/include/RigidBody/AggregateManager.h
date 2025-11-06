@@ -70,6 +70,12 @@ public:
         std::string name;                 ///< Optional name for debugging
 
         AggregateConfig() = default;
+
+        /// Static default configuration instance for use as default parameter
+        static const AggregateConfig& defaultConfig() {
+            static const AggregateConfig config;
+            return config;
+        }
     };
 
     /**
@@ -139,7 +145,7 @@ public:
      * @param config Aggregate configuration
      * @return Aggregate pointer (or nullptr on failure)
      */
-    PxAggregate* createAggregate(const AggregateConfig& config = AggregateConfig());
+    PxAggregate* createAggregate(const AggregateConfig& config = AggregateConfig::defaultConfig());
 
     /**
      * @brief Create aggregate with specific size

@@ -74,6 +74,12 @@ public:
         bool zeroGravity = true;
 
         GyroscopicConfig() = default;
+
+        /// Static default configuration instance for use as default parameter
+        static const GyroscopicConfig& defaultConfig() {
+            static const GyroscopicConfig config;
+            return config;
+        }
     };
 
     /**
@@ -147,7 +153,7 @@ public:
      * @return Created actor (or nullptr on failure)
      */
     PxRigidDynamic* createTShape(const PxTransform& transform,
-                                  const GyroscopicConfig& config = GyroscopicConfig());
+                                  const GyroscopicConfig& config = GyroscopicConfig::defaultConfig());
 
     /**
      * @brief Create L-shaped actor
@@ -156,7 +162,7 @@ public:
      * @return Created actor (or nullptr on failure)
      */
     PxRigidDynamic* createLShape(const PxTransform& transform,
-                                  const GyroscopicConfig& config = GyroscopicConfig());
+                                  const GyroscopicConfig& config = GyroscopicConfig::defaultConfig());
 
     /**
      * @brief Create hammer-shaped actor
@@ -165,7 +171,7 @@ public:
      * @return Created actor (or nullptr on failure)
      */
     PxRigidDynamic* createHammer(const PxTransform& transform,
-                                  const GyroscopicConfig& config = GyroscopicConfig());
+                                  const GyroscopicConfig& config = GyroscopicConfig::defaultConfig());
 
     /**
      * @brief Create dumbbell-shaped actor
@@ -174,7 +180,7 @@ public:
      * @return Created actor (or nullptr on failure)
      */
     PxRigidDynamic* createDumbbell(const PxTransform& transform,
-                                    const GyroscopicConfig& config = GyroscopicConfig());
+                                    const GyroscopicConfig& config = GyroscopicConfig::defaultConfig());
 
     /**
      * @brief Create cross-shaped actor
@@ -183,7 +189,7 @@ public:
      * @return Created actor (or nullptr on failure)
      */
     PxRigidDynamic* createCross(const PxTransform& transform,
-                                const GyroscopicConfig& config = GyroscopicConfig());
+                                const GyroscopicConfig& config = GyroscopicConfig::defaultConfig());
 
     /**
      * @brief Create tennis racket-shaped actor
@@ -192,7 +198,7 @@ public:
      * @return Created actor (or nullptr on failure)
      */
     PxRigidDynamic* createTennisRacket(const PxTransform& transform,
-                                       const GyroscopicConfig& config = GyroscopicConfig());
+                                       const GyroscopicConfig& config = GyroscopicConfig::defaultConfig());
 
     /**
      * @brief Create demo shape actor
@@ -203,7 +209,7 @@ public:
      */
     PxRigidDynamic* createDemoShape(DemoShape shape,
                                      const PxTransform& transform,
-                                     const GyroscopicConfig& config = GyroscopicConfig());
+                                     const GyroscopicConfig& config = GyroscopicConfig::defaultConfig());
 
     // ========================================================================
     // Gyroscopic Control
@@ -285,7 +291,7 @@ public:
         DemoShape shape,
         const PxVec3& position1,
         const PxVec3& position2,
-        const GyroscopicConfig& config = GyroscopicConfig());
+        const GyroscopicConfig& config = GyroscopicConfig::defaultConfig());
 
     /**
      * @brief Get PhysX physics instance

@@ -33,22 +33,23 @@ set(PHYSX_INCLUDE_DIRS
 )
 
 # PhysX Library Directory (adjust based on your build configuration)
+# Detect compiler - our PhysX was compiled with GCC
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
-    set(PHYSX_LIB_DIR "${PHYSX_ROOT_DIR}/bin/linux.clang/debug")
+    set(PHYSX_LIB_DIR "${PHYSX_ROOT_DIR}/bin/linux.gcc/bin/linux.x86_64/debug")
 elseif(CMAKE_BUILD_TYPE MATCHES "Release")
-    set(PHYSX_LIB_DIR "${PHYSX_ROOT_DIR}/bin/linux.clang/release")
+    set(PHYSX_LIB_DIR "${PHYSX_ROOT_DIR}/bin/linux.gcc/bin/linux.x86_64/release")
 else()
-    set(PHYSX_LIB_DIR "${PHYSX_ROOT_DIR}/bin/linux.clang/checked")
+    set(PHYSX_LIB_DIR "${PHYSX_ROOT_DIR}/bin/linux.gcc/bin/linux.x86_64/checked")
 endif()
 
-# PhysX Libraries
+# PhysX Libraries (matching our GCC-compiled libraries)
 set(PHYSX_LIBRARIES
     PhysX
     PhysXCommon
     PhysXFoundation
-    PhysXExtensions
+    PhysXExtensions_static
     PhysXCooking
-    PhysXPvdSDK
+    PhysXPvdSDK_static
 )
 
 # If GPU support is enabled

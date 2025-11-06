@@ -6,6 +6,7 @@
 #include "Joint/JointManager.h"
 #include "extensions/PxRigidBodyExt.h"
 #include <algorithm>
+#include <string>
 
 namespace PhysXWrapper {
 

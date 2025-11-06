@@ -47,7 +47,7 @@ bool GeometryQuery::raycastSingle(
         hit.actor = pxHit.actor;
         hit.shape = pxHit.shape;
         hit.faceIndex = pxHit.faceIndex;
-        hit.uv = pxHit.uv;
+        hit.uv = PxVec2(pxHit.u, pxHit.v);
         return true;
     }
 
@@ -71,7 +71,7 @@ int GeometryQuery::raycastMultiple(
     PxRaycastBuffer buffer(hitBuffer.data(), maxHits);
 
     PxQueryFilterData filterData;
-    filterData.flags = filter.flags | PxQueryFlag::eMULTIPLE;
+    filterData.flags = filter.flags;  // eMULTIPLE flag removed - use buffer size instead
     filterData.data = filter.data;
 
     bool status = m_scene->raycast(
@@ -93,7 +93,7 @@ int GeometryQuery::raycastMultiple(
             hit.actor = pxHit.actor;
             hit.shape = pxHit.shape;
             hit.faceIndex = pxHit.faceIndex;
-            hit.uv = pxHit.uv;
+            hit.uv = PxVec2(pxHit.u, pxHit.v);
             hits.push_back(hit);
         }
     }
