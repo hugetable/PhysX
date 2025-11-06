@@ -135,4 +135,13 @@ add_physxwrapper_example(example_pbdinflatable example_pbdinflatable.cpp)
 # Example 39: Deformable Mesh (FEM Soft Bodies, Tetrahedral Mesh, Elastic Materials)
 add_physxwrapper_example(example_deformablemesh example_deformablemesh.cpp)
 
-message(STATUS "PhysXWrapper examples configured successfully (39 examples)")
+# Example 40: Deformable Surface (Thin Shell/Membrane Simulation)
+add_physxwrapper_example(example_deformablesurface example_deformablesurface.cpp)
+
+# Example 41: Deformable Surface Skinning (Deformable Surface with Skeletal Skinning)
+add_physxwrapper_example(example_deformablesurfaceskinning example_deformablesurfaceskinning.cpp)
+
+# Example 42: Deformable Volume Attachment (Soft-Rigid Body Coupling)
+add_physxwrapper_example(example_deformablevolumeattachment example_deformablevolumeattachment.cpp)
+
+message(STATUS "PhysXWrapper examples configured successfully (42 examples)")

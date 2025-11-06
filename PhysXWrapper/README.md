@@ -400,7 +400,7 @@ ctest --output-on-failure > test_results.txt 2>&1
 
 ### 第三阶段：扩展实现 (进行中 - PhysX Snippets完整覆盖)
 
-基于PhysX官方72个Snippets，当前已实现39个(54%)，计划逐步补充剩余33个：
+基于PhysX官方72个Snippets，当前已实现42个(58%)，计划逐步补充剩余30个：
 
 **高优先级与关节系统 (已完成 ✅)**
 - [x] **JointDrive** - D6关节驱动系统 ✅
@@ -416,13 +416,13 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [x] **SpatialTendon** - 空间肌腱 (3D钢索路径、滑轮系统) ✅
 - [x] **ImmediateArticulation** - 即时模式关节链 (FK/ID直接计算) ✅
 
-**软体/流体扩展 (5个待实现)**
+**软体/流体扩展 (2个待实现)**
 - [x] **PBDCloth** - PBD布料模拟 (GPU加速粒子布料) ✅
 - [x] **PBDInflatable** - PBD充气物体 (体积约束、压力模拟) ✅
 - [x] **DeformableMesh** - 可变形网格 (FEM有限元、弹性材料) ✅
-- [ ] DeformableSurface - 可变形表面
-- [ ] DeformableSurfaceSkinning - 可变形表面蒙皮
-- [ ] DeformableVolumeAttachment - 软体附着到刚体
+- [x] **DeformableSurface** - 可变形表面 (薄壳/膜理论、Kirchhoff-Love) ✅
+- [x] **DeformableSurfaceSkinning** - 可变形表面蒙皮 (线性混合、骨骼绑定) ✅
+- [x] **DeformableVolumeAttachment** - 软体附着到刚体 (弹簧阻尼、双向耦合) ✅
 - [ ] DeformableVolumeKinematic - 软体与运动学物体交互
 - [ ] DeformableVolumeSkinning - 软体蒙皮
 
@@ -468,7 +468,7 @@ ctest --output-on-failure > test_results.txt 2>&1
 - [ ] ContactReportCCD - CCD接触报告
 - [ ] 其他工具类特性
 
-**覆盖率统计**: 27/72 已实现 (38%) | 目标: 60/72 (83% 常用功能)
+**覆盖率统计**: 42/72 已实现 (58%) | 目标: 60/72 (83% 常用功能)
 
 ### 第四阶段：完善和优化 (持续)
 - [ ] 性能优化和基准测试
