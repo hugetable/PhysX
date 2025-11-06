@@ -6,6 +6,13 @@ build_*/
 */build_*/
 **/build/
 **/build_*/
+_build/
+_compiler/
+**/_build/
+**/_compiler/
+
+# Build tools (auto-downloaded)
+.tools/
 
 # Binary outputs
 *.so
