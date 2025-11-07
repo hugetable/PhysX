@@ -39,10 +39,10 @@ using namespace physx;
 struct ContactModificationContext {
     PxContactModifyPair* pair;          ///< Contact pair being modified
     PxU32 contactIndex;                 ///< Index of current contact
-    PxRigidActor* actor0;               ///< First actor
-    PxRigidActor* actor1;               ///< Second actor
-    PxShape* shape0;                    ///< First shape
-    PxShape* shape1;                    ///< Second shape
+    const PxRigidActor* actor0;         ///< First actor (const in PhysX 5.x)
+    const PxRigidActor* actor1;         ///< Second actor (const in PhysX 5.x)
+    const PxShape* shape0;              ///< First shape (const in PhysX 5.x)
+    const PxShape* shape1;              ///< Second shape (const in PhysX 5.x)
 };
 
 /**
@@ -248,7 +248,7 @@ public:
      * @param actor1 Second actor
      * @return True if enabled
      */
-    bool isEnabledForActorPair(PxRigidActor* actor0, PxRigidActor* actor1) const;
+    bool isEnabledForActorPair(const PxRigidActor* actor0, const PxRigidActor* actor1) const;
 
     // ========================================================================
     // Statistics

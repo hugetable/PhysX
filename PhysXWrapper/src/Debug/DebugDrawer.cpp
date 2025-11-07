@@ -194,7 +194,8 @@ void DebugDrawer::drawJoint(PxJoint* joint)
     drawAxes(globalFrame1, 0.5f);
 
     // Draw joint-specific visualization based on type
-    PxJointConcreteType::Enum jointType = joint->getConcreteType();
+    // PhysX 5.x: getConcreteType() returns PxType, cast to PxJointConcreteType::Enum
+    PxJointConcreteType::Enum jointType = static_cast<PxJointConcreteType::Enum>(joint->getConcreteType());
 
     switch (jointType) {
         case PxJointConcreteType::eSPHERICAL: {

@@ -447,7 +447,9 @@ PxReal DistanceFieldGenerator::sampleDistanceField(
     // Compute normalized coordinates [0, 1]
     const PxVec3 extents = bounds.getExtents();
     const PxVec3 minCorner = bounds.minimum;
-    const PxVec3 normalized = (point - minCorner) / (extents * 2.0f);
+    const PxVec3 delta = point - minCorner;
+    const PxVec3 divisor = extents * 2.0f;
+    const PxVec3 normalized = PxVec3(delta.x / divisor.x, delta.y / divisor.y, delta.z / divisor.z);
 
     // Convert to voxel coordinates
     const PxVec3 voxelCoord = normalized * static_cast<PxReal>(resolution);

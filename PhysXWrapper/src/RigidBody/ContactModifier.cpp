@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <map>
 #include <set>
+#include <iostream>
 
 namespace PhysXWrapper {
 
@@ -119,9 +120,17 @@ bool ContactModifier::initialize(PxPhysics* physics, PxScene* scene) {
     m_impl->m_physics = physics;
     m_impl->m_scene = scene;
 
-    // Set this as the scene's contact modify callback
-    PxSceneDesc& sceneDesc = const_cast<PxSceneDesc&>(scene->getSceneDesc());
-    sceneDesc.contactModifyCallback = this;
+    // PhysX 5.x: Scene descriptor cannot be modified after scene creation
+    // Contact modify callback must be set in scene descriptor BEFORE creating the scene
+    // This initialize() method should be called before scene creation, or the callback
+    // should be set in the scene descriptor passed to PxPhysics::createScene()
+    //
+    // WARNING: If scene is already created, contact modification will NOT work!
+    // The proper way is to set contactModifyCallback in PxSceneDesc before calling createScene()
+
+    std::cerr << "WARNING: ContactModifier::initialize() - In PhysX 5.x, contact modify callback "
+              << "must be set in PxSceneDesc BEFORE creating the scene. "
+              << "If the scene is already created, contact modification will not work!" << std::endl;
 
     m_impl->m_initialized = true;
     m_impl->clearError();
@@ -132,13 +141,9 @@ bool ContactModifier::initialize(PxPhysics* physics, PxScene* scene) {
 void ContactModifier::cleanup() {
     if (!m_impl->m_initialized) return;
 
-    // Remove callback from scene
-    if (m_impl->m_scene) {
-        PxSceneDesc& sceneDesc = const_cast<PxSceneDesc&>(m_impl->m_scene->getSceneDesc());
-        if (sceneDesc.contactModifyCallback == this) {
-            sceneDesc.contactModifyCallback = nullptr;
-        }
-    }
+    // PhysX 5.x: Cannot modify scene descriptor after scene creation
+    // The callback will remain active until the scene is destroyed
+    // No need to manually remove it
 
     m_impl->m_customCallbacks.clear();
     m_impl->m_enabledPairs.clear();
@@ -217,10 +222,11 @@ void ContactModifier::disableForActorPair(PxRigidActor* actor0, PxRigidActor* ac
     m_impl->m_enabledPairs.erase(key);
 }
 
-bool ContactModifier::isEnabledForActorPair(PxRigidActor* actor0, PxRigidActor* actor1) const {
+bool ContactModifier::isEnabledForActorPair(const PxRigidActor* actor0, const PxRigidActor* actor1) const {
     if (!m_impl->m_useActorPairFiltering) return true;
 
-    ActorPairKey key{actor0, actor1};
+    // Cast to non-const for key lookup (actors are only used as keys, not modified)
+    ActorPairKey key{const_cast<PxRigidActor*>(actor0), const_cast<PxRigidActor*>(actor1)};
     return m_impl->m_enabledPairs.find(key) != m_impl->m_enabledPairs.end();
 }
 

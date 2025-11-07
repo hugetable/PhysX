@@ -8,6 +8,7 @@
 #include <fstream>
 #include <chrono>
 #include <cstring>
+#include <algorithm>
 
 namespace PhysXWrapper {
 
@@ -269,9 +270,9 @@ CollectionLoader::LoadResult CollectionLoader::loadFromMemory(const void* data, 
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
-    // Deserialize from memory
+    // Deserialize from memory (PhysX 5.x: parameter changed from const void* to void*)
     PxCollection* collection = PxSerialization::createCollectionFromBinary(
-        data,
+        const_cast<void*>(data),
         *m_impl->m_serializationRegistry
     );
 

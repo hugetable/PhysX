@@ -266,9 +266,13 @@ ConvexMeshResult ConvexMeshBuilder::cookConvexMesh(
         desc.flags |= PxConvexFlag::eCHECK_ZERO_AREA_TRIANGLES;
     }
 
+    // PhysX 5.x: eGPU_COMPATIBLE flag has been removed
+    // GPU compatibility is handled differently in PhysX 5.x
+    /*
     if (config.buildGPUData) {
         desc.flags |= PxConvexFlag::eGPU_COMPATIBLE;
     }
+    */
 
     // Start timing
     auto startTime = std::chrono::high_resolution_clock::now();
@@ -346,9 +350,13 @@ PxCookingParams ConvexMeshBuilder::createCookingParams(const ConvexMeshConfig& c
     params.convexMeshCookingType = config.cookingType;
     params.gaussMapLimit = config.gaussMapLimit;
 
+    // PhysX 5.x: skinWidth parameter has been removed from PxCookingParams
+    // Inflation is now handled differently in the convex mesh descriptor
+    /*
     if (config.inflation > 0.0f) {
         params.skinWidth = config.inflation;
     }
+    */
 
     if (config.vertexWeldTolerance > 0.0f) {
         params.meshWeldTolerance = config.vertexWeldTolerance;

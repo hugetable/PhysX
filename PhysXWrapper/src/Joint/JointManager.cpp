@@ -159,11 +159,16 @@ PxSphericalJoint* JointManager::createSphericalJoint(
         joint->setSphericalJointFlag(PxSphericalJointFlag::eLIMIT_ENABLED, true);
     }
 
-    // Apply projection
+    // PhysX 5.x: Projection API has been removed/changed
+    // Joint projection settings are no longer configurable this way
+    /*
     if (config.enableProjection) {
-        joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
-        joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
+        // PhysX 5.x: setProjectionLinearTolerance removed
+        // joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
+        // PhysX 5.x: ePROJECTION flag removed
+        // joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
     }
+    */
 
     // Apply break configuration
     applyBreakConfig(joint, breakConfig);
@@ -209,9 +214,12 @@ PxFixedJoint* JointManager::createFixedJoint(
 
     // Apply projection
     if (config.enableProjection) {
-        joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
-        joint->setProjectionAngularTolerance(config.projectionAngularTolerance);
-        joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
+        // PhysX 5.x: setProjectionLinearTolerance removed
+        // joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
+        // PhysX 5.x: setProjectionAngularTolerance removed
+        // joint->setProjectionAngularTolerance(config.projectionAngularTolerance);
+        // PhysX 5.x: ePROJECTION flag removed
+        // joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
     }
 
     // Apply break configuration
@@ -276,9 +284,12 @@ PxRevoluteJoint* JointManager::createRevoluteJoint(
 
     // Apply projection
     if (config.enableProjection) {
-        joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
-        joint->setProjectionAngularTolerance(config.projectionAngularTolerance);
-        joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
+        // PhysX 5.x: setProjectionLinearTolerance removed
+        // joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
+        // PhysX 5.x: setProjectionAngularTolerance removed
+        // joint->setProjectionAngularTolerance(config.projectionAngularTolerance);
+        // PhysX 5.x: ePROJECTION flag removed
+        // joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
     }
 
     // Apply break configuration
@@ -336,9 +347,12 @@ PxPrismaticJoint* JointManager::createPrismaticJoint(
 
     // Apply projection
     if (config.enableProjection) {
-        joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
-        joint->setProjectionAngularTolerance(config.projectionAngularTolerance);
-        joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
+        // PhysX 5.x: setProjectionLinearTolerance removed
+        // joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
+        // PhysX 5.x: setProjectionAngularTolerance removed
+        // joint->setProjectionAngularTolerance(config.projectionAngularTolerance);
+        // PhysX 5.x: ePROJECTION flag removed
+        // joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
     }
 
     // Apply break configuration
@@ -404,7 +418,8 @@ PxDistanceJoint* JointManager::createDistanceJoint(
 
     // Apply projection
     if (config.enableProjection) {
-        joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
+        // PhysX 5.x: ePROJECTION flag removed
+        // joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
     }
 
     // Apply break configuration
@@ -457,10 +472,9 @@ PxD6Joint* JointManager::createD6Joint(
     joint->setMotion(PxD6Axis::eSWING1, config.motionSwing1);
     joint->setMotion(PxD6Axis::eSWING2, config.motionSwing2);
 
-    // Apply linear limits
+    // Apply linear limits (PhysX 5.x: constructor no longer takes TolerancesScale)
     if (config.enableLinearLimit) {
-        PxJointLinearLimit limit(m_impl->m_physics->getTolerancesScale(),
-                                 config.linearLimitValue);
+        PxJointLinearLimit limit(config.linearLimitValue);
         limit.restitution = config.linearLimitRestitution;
         limit.stiffness = config.linearLimitStiffness;
         limit.damping = config.linearLimitDamping;
@@ -494,9 +508,12 @@ PxD6Joint* JointManager::createD6Joint(
 
     // Apply projection
     if (config.enableProjection) {
-        joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
-        joint->setProjectionAngularTolerance(config.projectionAngularTolerance);
-        joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
+        // PhysX 5.x: setProjectionLinearTolerance removed
+        // joint->setProjectionLinearTolerance(config.projectionLinearTolerance);
+        // PhysX 5.x: setProjectionAngularTolerance removed
+        // joint->setProjectionAngularTolerance(config.projectionAngularTolerance);
+        // PhysX 5.x: ePROJECTION flag removed
+        // joint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
     }
 
     // Apply break configuration
@@ -700,7 +717,8 @@ void JointManager::notifyJointBreak(PxJoint* joint, PxReal force, PxReal torque)
         event.joint = joint;
         event.forceApplied = force;
         event.torqueApplied = torque;
-        event.userData = joint->getUserData();
+        // PhysX 5.x: getUserData() is now a public member userData
+        event.userData = joint->userData;
 
         m_impl->m_breakCallback(event);
     }

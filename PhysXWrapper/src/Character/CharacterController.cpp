@@ -256,10 +256,10 @@ CharacterController::CollisionFlags CharacterController::move(const PxVec3& disp
         filters
     );
 
-    // Update collision flags
-    m_impl->m_lastCollisionFlags.collisionDown = (collisionFlags & PxControllerCollisionFlag::eCOLLISION_DOWN) != 0;
-    m_impl->m_lastCollisionFlags.collisionUp = (collisionFlags & PxControllerCollisionFlag::eCOLLISION_UP) != 0;
-    m_impl->m_lastCollisionFlags.collisionSides = (collisionFlags & PxControllerCollisionFlag::eCOLLISION_SIDES) != 0;
+    // Update collision flags (PhysX 5.x: use isSet() for PxFlags)
+    m_impl->m_lastCollisionFlags.collisionDown = collisionFlags.isSet(PxControllerCollisionFlag::eCOLLISION_DOWN);
+    m_impl->m_lastCollisionFlags.collisionUp = collisionFlags.isSet(PxControllerCollisionFlag::eCOLLISION_UP);
+    m_impl->m_lastCollisionFlags.collisionSides = collisionFlags.isSet(PxControllerCollisionFlag::eCOLLISION_SIDES);
 
     return m_impl->m_lastCollisionFlags;
 }
@@ -570,7 +570,9 @@ bool CharacterController::resize(PxReal height)
         return false;
     }
 
-    return m_impl->m_controller->resize(height);
+    // PhysX 5.x: resize() returns void instead of bool
+    m_impl->m_controller->resize(height);
+    return true;
 }
 
 // ============================================================================

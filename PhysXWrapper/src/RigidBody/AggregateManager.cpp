@@ -98,9 +98,18 @@ PxAggregate* AggregateManager::createAggregate(const AggregateConfig& config)
         return nullptr;
     }
 
+    // PhysX 5.x API: createAggregate(maxActors, maxShapes, filterHint)
+    // Estimate maxShapes as maxActors * 4 (assuming average 4 shapes per actor)
+    const PxU32 maxShapes = config.maxActors * 4;
+    const PxAggregateFilterHint filterHint = PxGetAggregateFilterHint(
+        PxAggregateType::eGENERIC,
+        config.enableSelfCollision
+    );
+
     PxAggregate* aggregate = m_impl->m_physics->createAggregate(
         config.maxActors,
-        config.enableSelfCollision
+        maxShapes,
+        filterHint
     );
 
     if (!aggregate) {
@@ -132,9 +141,9 @@ bool AggregateManager::releaseAggregate(PxAggregate* aggregate)
         m_impl->m_aggregates.erase(it);
     }
 
-    // Remove from scene if needed
-    if (m_impl->m_scene && m_impl->m_scene->getAggregate(*aggregate)) {
-        m_impl->m_scene->removeAggregate(*aggregate);
+    // Remove from scene if needed (PhysX 5.x: use aggregate->getScene())
+    if (aggregate->getScene()) {
+        aggregate->getScene()->removeAggregate(*aggregate);
     }
 
     // Release aggregate
@@ -146,9 +155,9 @@ void AggregateManager::releaseAllAggregates()
 {
     for (PxAggregate* aggregate : m_impl->m_aggregates) {
         if (aggregate) {
-            // Remove from scene if needed
-            if (m_impl->m_scene && m_impl->m_scene->getAggregate(*aggregate)) {
-                m_impl->m_scene->removeAggregate(*aggregate);
+            // Remove from scene if needed (PhysX 5.x: use aggregate->getScene())
+            if (aggregate->getScene()) {
+                aggregate->getScene()->removeAggregate(*aggregate);
             }
             aggregate->release();
         }
@@ -231,7 +240,13 @@ bool AggregateManager::removeFromScene(PxAggregate* aggregate)
         return false;
     }
 
-    return m_impl->m_scene->removeAggregate(*aggregate);
+    // PhysX 5.x: removeAggregate returns void, check if aggregate is in scene first
+    if (aggregate->getScene() != m_impl->m_scene) {
+        return false;
+    }
+
+    m_impl->m_scene->removeAggregate(*aggregate);
+    return true;
 }
 
 bool AggregateManager::isInScene(PxAggregate* aggregate) const
@@ -240,7 +255,8 @@ bool AggregateManager::isInScene(PxAggregate* aggregate) const
         return false;
     }
 
-    return m_impl->m_scene->getAggregate(*aggregate) != nullptr;
+    // PhysX 5.x: use aggregate->getScene() instead of scene->getAggregate()
+    return aggregate->getScene() == m_impl->m_scene;
 }
 
 // ============================================================================

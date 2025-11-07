@@ -638,7 +638,10 @@ void ArticulationManager::applyArticulationConfig(
     articulation->setSleepThreshold(config.sleepThreshold);
     articulation->setStabilizationThreshold(config.stabilizationThreshold);
     articulation->setWakeCounter(config.wakeCounter);
-    articulation->setMaxDepenetrationVelocity(config.maxDepenetrationVelocity);
+
+    // PhysX 5.x: setMaxDepenetrationVelocity() has been removed
+    // This setting is no longer configurable per articulation
+    // articulation->setMaxDepenetrationVelocity(config.maxDepenetrationVelocity);
 
     if (config.fixBase) {
         articulation->setArticulationFlag(

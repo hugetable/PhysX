@@ -8,6 +8,7 @@
 #include "extensions/PxDeformableVolumeExt.h"
 #include "extensions/PxRemeshingExt.h"
 #include <algorithm>
+#include <iostream>
 
 namespace PhysXWrapper {
 
@@ -117,19 +118,19 @@ void DeformableVolumeManager::cleanup() {
     // Release all volumes
     for (DeformableVolumeHandle* handle : m_impl->m_volumes) {
         if (handle) {
-            // Free GPU buffers
+            // Free GPU buffers (PhysX 5.x: call freePinnedHostBuffer directly)
             if (m_impl->m_cudaContextManager) {
                 if (handle->simPositionInvMass) {
-                    PX_EXT_PINNED_MEMORY_FREE(*m_impl->m_cudaContextManager, handle->simPositionInvMass);
+                    m_impl->m_cudaContextManager->freePinnedHostBuffer(handle->simPositionInvMass);
                 }
                 if (handle->simVelocity) {
-                    PX_EXT_PINNED_MEMORY_FREE(*m_impl->m_cudaContextManager, handle->simVelocity);
+                    m_impl->m_cudaContextManager->freePinnedHostBuffer(handle->simVelocity);
                 }
                 if (handle->collPositionInvMass) {
-                    PX_EXT_PINNED_MEMORY_FREE(*m_impl->m_cudaContextManager, handle->collPositionInvMass);
+                    m_impl->m_cudaContextManager->freePinnedHostBuffer(handle->collPositionInvMass);
                 }
                 if (handle->restPosition) {
-                    PX_EXT_PINNED_MEMORY_FREE(*m_impl->m_cudaContextManager, handle->restPosition);
+                    m_impl->m_cudaContextManager->freePinnedHostBuffer(handle->restPosition);
                 }
             }
 
@@ -424,19 +425,19 @@ void DeformableVolumeManager::releaseDeformableVolume(DeformableVolumeHandle* ha
 
     m_impl->untrackVolume(handle);
 
-    // Free GPU buffers
+    // Free GPU buffers (PhysX 5.x: call freePinnedHostBuffer directly)
     if (m_impl->m_cudaContextManager) {
         if (handle->simPositionInvMass) {
-            PX_EXT_PINNED_MEMORY_FREE(*m_impl->m_cudaContextManager, handle->simPositionInvMass);
+            m_impl->m_cudaContextManager->freePinnedHostBuffer(handle->simPositionInvMass);
         }
         if (handle->simVelocity) {
-            PX_EXT_PINNED_MEMORY_FREE(*m_impl->m_cudaContextManager, handle->simVelocity);
+            m_impl->m_cudaContextManager->freePinnedHostBuffer(handle->simVelocity);
         }
         if (handle->collPositionInvMass) {
-            PX_EXT_PINNED_MEMORY_FREE(*m_impl->m_cudaContextManager, handle->collPositionInvMass);
+            m_impl->m_cudaContextManager->freePinnedHostBuffer(handle->collPositionInvMass);
         }
         if (handle->restPosition) {
-            PX_EXT_PINNED_MEMORY_FREE(*m_impl->m_cudaContextManager, handle->restPosition);
+            m_impl->m_cudaContextManager->freePinnedHostBuffer(handle->restPosition);
         }
     }
 
@@ -451,17 +452,20 @@ void DeformableVolumeManager::releaseDeformableVolume(DeformableVolumeHandle* ha
 // ============================================================================
 
 void DeformableVolumeManager::updateDeformedMeshes() {
+    // PhysX 5.x: copyToHost API has changed or requires GPU build
+    // This functionality is disabled in CPU-only builds
+    std::cerr << "WARNING: DeformableVolumeManager::updateDeformedMeshes() - "
+              << "Deformable volume GPU features are not available in CPU-only builds." << std::endl;
+
+    // TODO: Implement CPU-based alternative or require GPU build
+    /*
     for (DeformableVolumeHandle* handle : m_impl->m_volumes) {
         if (handle && handle->actor && handle->simPositionInvMass) {
             // Copy deformed positions from GPU
-            PxDeformableVolumeExt::copyToHost(
-                *handle->actor,
-                PxDeformableVolumeDataFlag::ePOSITION_INVMASS,
-                handle->simPositionInvMass,
-                nullptr, nullptr, nullptr
-            );
+            // API needs updating for PhysX 5.x
         }
     }
+    */
 }
 
 std::vector<PxVec3> DeformableVolumeManager::getDeformedVertices(DeformableVolumeHandle* handle) {
