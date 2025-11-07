@@ -1,0 +1,63 @@
+// config.h.in - 配置文件模板
+// 由 CMake 自动生成
+
+#ifndef PHYSICS_RENDER_CONFIG_H
+#define PHYSICS_RENDER_CONFIG_H
+
+// OptiX 版本
+#define OPTIX_VERSION 90000
+
+// 功能开关
+#cmakedefine ENABLE_FLOW
+#cmakedefine ENABLE_BLAST
+
+// OptiX-IR 支持
+#cmakedefine USE_OPTIX_IR
+
+// 模块扩展名
+#define OPTIX_MODULE_EXTENSION "@OPTIX_MODULE_EXTENSION@"
+
+// CUDA 架构
+#define SM_COMPUTE "@SM_COMPUTE@"
+
+// 输出目录
+#define MODULE_TARGET_DIR "@MODULE_TARGET_DIR@"
+
+// 版本信息
+#define PHYSICS_RENDER_VERSION_MAJOR 1
+#define PHYSICS_RENDER_VERSION_MINOR 0
+#define PHYSICS_RENDER_VERSION_PATCH 0
+
+// 调试开关
+#ifndef NDEBUG
+#define PHYSICS_RENDER_DEBUG 1
+#else
+#define PHYSICS_RENDER_DEBUG 0
+#endif
+
+// 日志级别
+#define LOG_LEVEL_ERROR   0
+#define LOG_LEVEL_WARNING 1
+#define LOG_LEVEL_INFO    2
+#define LOG_LEVEL_DEBUG   3
+
+#ifndef LOG_LEVEL
+#if PHYSICS_RENDER_DEBUG
+#define LOG_LEVEL LOG_LEVEL_DEBUG
+#else
+#define LOG_LEVEL LOG_LEVEL_INFO
+#endif
+#endif
+
+// 性能配置
+#define DEFAULT_MAX_RIGID_BODIES 10000
+#define DEFAULT_MAX_PARTICLES 100000
+#define DEFAULT_MAX_BLAST_CHUNKS 5000
+
+// 渲染配置
+#define DEFAULT_WINDOW_WIDTH 1920
+#define DEFAULT_WINDOW_HEIGHT 1080
+#define DEFAULT_SAMPLES_PER_PIXEL 4
+#define DEFAULT_MAX_PATH_LENGTH 8
+
+#endif // PHYSICS_RENDER_CONFIG_H
