@@ -64,6 +64,12 @@ public:
         bool printStats = false;
 
         BVHConfig() = default;
+
+        /// Static default configuration instance for use as default parameter
+        static const BVHConfig& defaultConfig() {
+            static const BVHConfig config;
+            return config;
+        }
     };
 
     /**
@@ -91,6 +97,12 @@ public:
         PxU32 maxAggregateSize = 256;                     ///< Max shapes in aggregate
 
         ActorWithBVHConfig() = default;
+
+        /// Static default configuration instance for use as default parameter
+        static const ActorWithBVHConfig& defaultConfig() {
+            static const ActorWithBVHConfig config;
+            return config;
+        }
     };
 
 public:
@@ -137,7 +149,7 @@ public:
      * @return Created BVH structure (caller must release)
      */
     PxBVH* buildFromBounds(const std::vector<PxBounds3>& bounds,
-                           const BVHConfig& config = BVHConfig());
+                           const BVHConfig& config = BVHConfig::defaultConfig());
 
     /**
      * @brief Build BVH from bounding boxes array
@@ -147,7 +159,7 @@ public:
      * @return Created BVH structure (caller must release)
      */
     PxBVH* buildFromBounds(const PxBounds3* bounds, PxU32 numBounds,
-                           const BVHConfig& config = BVHConfig());
+                           const BVHConfig& config = BVHConfig::defaultConfig());
 
     /**
      * @brief Build BVH from actor's shape local bounds
@@ -156,7 +168,7 @@ public:
      * @return Created BVH structure (caller must release)
      */
     PxBVH* buildFromActor(PxRigidActor* actor,
-                          const BVHConfig& config = BVHConfig());
+                          const BVHConfig& config = BVHConfig::defaultConfig());
 
     /**
      * @brief Build BVH from a list of shapes
@@ -165,7 +177,7 @@ public:
      * @return Created BVH structure (caller must release)
      */
     PxBVH* buildFromShapes(const std::vector<PxShape*>& shapes,
-                           const BVHConfig& config = BVHConfig());
+                           const BVHConfig& config = BVHConfig::defaultConfig());
 
     // ========================================================================
     // Actor Integration
@@ -199,7 +211,7 @@ public:
      */
     PxRigidActor* createActorWithBVH(PxScene* scene,
                                      const std::vector<PxShape*>& shapes,
-                                     const ActorWithBVHConfig& config = ActorWithBVHConfig(),
+                                     const ActorWithBVHConfig& config = ActorWithBVHConfig::defaultConfig(),
                                      PxMaterial* material = nullptr);
 
     // ========================================================================

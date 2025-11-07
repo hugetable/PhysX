@@ -193,6 +193,8 @@ public:
 private:
     class Impl;
     std::unique_ptr<Impl> m_impl;
+
+    friend class ContactEventCallback;
 };
 
 /**

@@ -6,6 +6,8 @@
 #include "Utility/PhysicsRecorder.h"
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+#include <set>
 
 namespace PhysXWrapper {
 

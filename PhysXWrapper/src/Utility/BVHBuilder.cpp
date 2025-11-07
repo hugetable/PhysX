@@ -360,10 +360,14 @@ void BVHBuilder::extractShapeBounds(const std::vector<PxShape*>& shapes,
     for (PxShape* shape : shapes) {
         if (shape) {
             PxGeometryHolder geom = shape->getGeometry();
-            PxBounds3 bounds = PxGeometryQuery::getWorldBounds(
+            PxBounds3 bounds;
+            // PhysX 5.x: use computeGeomBounds instead of getWorldBounds
+            PxGeometryQuery::computeGeomBounds(
+                bounds,
                 geom.any(),
                 shape->getLocalPose(),
-                1.0f  // Scale
+                0.0f,  // offset
+                1.0f   // inflation (scale)
             );
             outBounds.push_back(bounds);
         }

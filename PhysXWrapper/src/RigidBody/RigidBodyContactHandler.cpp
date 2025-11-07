@@ -9,6 +9,9 @@
 
 namespace PhysXWrapper {
 
+// Forward declaration
+class ContactEventCallback;
+
 /**
  * @brief Internal implementation of contact event callback
  */
@@ -53,6 +56,7 @@ private:
  * @brief Private implementation class
  */
 class RigidBodyContactHandler::Impl {
+    friend class ContactEventCallback;
 public:
     Impl()
         : m_eventCallback(this)
@@ -90,8 +94,9 @@ public:
             // Create contact event
             ContactEvent event;
             event.type = eventType;
-            event.actor0 = pairHeader.actors[0];
-            event.actor1 = pairHeader.actors[1];
+            // PhysX 5.x: PxContactPairHeader uses PxActor*, cast to PxRigidActor*
+            event.actor0 = static_cast<PxRigidActor*>(pairHeader.actors[0]);
+            event.actor1 = static_cast<PxRigidActor*>(pairHeader.actors[1]);
 
             // Extract contact points if detailed reporting is enabled
             if (m_detailedReporting && cp.contactCount > 0) {
@@ -104,8 +109,9 @@ public:
                     point.normal = contactPoints[j].normal;
                     point.impulse = contactPoints[j].impulse;
                     point.separation = contactPoints[j].separation;
-                    point.actor0 = pairHeader.actors[0];
-                    point.actor1 = pairHeader.actors[1];
+                    // PhysX 5.x: cast PxActor* to PxRigidActor*
+                    point.actor0 = static_cast<PxRigidActor*>(pairHeader.actors[0]);
+                    point.actor1 = static_cast<PxRigidActor*>(pairHeader.actors[1]);
                     point.shape0 = cp.shapes[0];
                     point.shape1 = cp.shapes[1];
 

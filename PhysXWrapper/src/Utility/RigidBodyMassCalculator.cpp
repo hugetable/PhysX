@@ -36,7 +36,9 @@ bool RigidBodyMassCalculator::setMassFromShapeDensities(
     PxU32 numShapes = actor->getNbShapes();
     if (numShapes == 0 || shapeDensities.size() != numShapes) return false;
 
-    return PxRigidBodyExt::updateMassAndInertia(*actor, shapeDensities.data(), numShapes, massLocalPose);
+    // PhysX 5.x: updateMassAndInertia uses PxVec3* instead of PxTransform*
+    const PxVec3* massPos = massLocalPose ? &massLocalPose->p : nullptr;
+    return PxRigidBodyExt::updateMassAndInertia(*actor, shapeDensities.data(), numShapes, massPos);
 }
 
 bool RigidBodyMassCalculator::setCenterOfMass(PxRigidDynamic* actor, const PxVec3& centerOfMass) {
@@ -53,8 +55,10 @@ MassProperties RigidBodyMassCalculator::getMassProperties(PxRigidDynamic* actor)
 
     props.mass = actor->getMass();
     props.centerOfMass = actor->getCMassLocalPose().p;
-    props.inertiaTensor = PxMat33(actor->getMassSpaceInertiaTensor());
-    props.principalInertia = actor->getMassSpaceInertiaTensor();
+    // PhysX 5.x: PxMat33 constructor from PxVec3 creates diagonal matrix
+    PxVec3 inertia = actor->getMassSpaceInertiaTensor();
+    props.inertiaTensor = PxMat33::createDiagonal(inertia);
+    props.principalInertia = inertia;
 
     return props;
 }

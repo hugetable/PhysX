@@ -163,9 +163,10 @@ void TriggerSimulationCallback::onTrigger(PxTriggerPair* pairs, PxU32 count) {
         const PxTriggerPair& pair = pairs[i];
 
         TriggerEvent event;
-        event.triggerActor = pair.triggerActor;
+        // PhysX 5.x: PxTriggerPair uses PxActor*, cast to PxRigidActor*
+        event.triggerActor = static_cast<PxRigidActor*>(pair.triggerActor);
         event.triggerShape = pair.triggerShape;
-        event.otherActor = pair.otherActor;
+        event.otherActor = static_cast<PxRigidActor*>(pair.otherActor);
         event.otherShape = pair.otherShape;
         event.statusFlags = pair.status;
 
@@ -194,14 +195,15 @@ void TriggerSimulationCallback::onContact(const PxContactPairHeader& pairHeader,
             TriggerEvent event;
             if (isTrigger0) {
                 event.triggerShape = pair.shapes[0];
-                event.triggerActor = pairHeader.actors[0];
+                // PhysX 5.x: PxContactPairHeader uses PxActor*, cast to PxRigidActor*
+                event.triggerActor = static_cast<PxRigidActor*>(pairHeader.actors[0]);
                 event.otherShape = pair.shapes[1];
-                event.otherActor = pairHeader.actors[1];
+                event.otherActor = static_cast<PxRigidActor*>(pairHeader.actors[1]);
             } else {
                 event.triggerShape = pair.shapes[1];
-                event.triggerActor = pairHeader.actors[1];
+                event.triggerActor = static_cast<PxRigidActor*>(pairHeader.actors[1]);
                 event.otherShape = pair.shapes[0];
-                event.otherActor = pairHeader.actors[0];
+                event.otherActor = static_cast<PxRigidActor*>(pairHeader.actors[0]);
             }
             event.statusFlags = pair.events;
 
@@ -462,7 +464,8 @@ bool RigidBodyTrigger::isTriggerShape(PxShape* shape, const TriggerConfig& confi
     if (!shape) return false;
 
     if (config.implementation == TriggerImplementation::NATIVE) {
-        return (shape->getFlags() & PxShapeFlag::eTRIGGER_SHAPE) != 0;
+        // PhysX 5.x: use isSet() method for PxFlags
+        return shape->getFlags().isSet(PxShapeFlag::eTRIGGER_SHAPE);
     }
     else if (config.implementation == TriggerImplementation::FILTER_SHADER) {
         return isTriggerFilterData(shape->getSimulationFilterData());

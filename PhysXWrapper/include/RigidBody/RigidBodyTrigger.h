@@ -269,6 +269,9 @@ private:
     class Impl;
     std::unique_ptr<Impl> m_impl;
 
+    friend class TriggerSimulationCallback;
+    friend class TriggerFilterCallback;
+
     // Store current config for internal use
     TriggerConfig m_currentConfig;
 };

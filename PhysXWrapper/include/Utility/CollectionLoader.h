@@ -85,6 +85,12 @@ public:
         bool validate = true;
 
         LoadConfig() = default;
+
+        /// Static default configuration instance for use as default parameter
+        static const LoadConfig& defaultConfig() {
+            static const LoadConfig config;
+            return config;
+        }
     };
 
     /**
@@ -154,7 +160,7 @@ public:
      * @return Load result with collection
      */
     LoadResult loadFromFile(const std::string& filename,
-                            const LoadConfig& config = LoadConfig());
+                            const LoadConfig& config = LoadConfig::defaultConfig());
 
     /**
      * @brief Load collection from binary file
@@ -163,7 +169,7 @@ public:
      * @return Load result with collection
      */
     LoadResult loadFromBinaryFile(const std::string& filename,
-                                   const LoadConfig& config = LoadConfig());
+                                   const LoadConfig& config = LoadConfig::defaultConfig());
 
     /**
      * @brief Load collection from XML file
@@ -172,7 +178,7 @@ public:
      * @return Load result with collection
      */
     LoadResult loadFromXMLFile(const std::string& filename,
-                                const LoadConfig& config = LoadConfig());
+                                const LoadConfig& config = LoadConfig::defaultConfig());
 
     /**
      * @brief Load multiple files (with dependencies)
@@ -184,7 +190,7 @@ public:
      * may contain references to objects in the first file.
      */
     std::vector<LoadResult> loadMultipleFiles(const std::vector<std::string>& filenames,
-                                               const LoadConfig& config = LoadConfig());
+                                               const LoadConfig& config = LoadConfig::defaultConfig());
 
     // ========================================================================
     // Memory Loading
@@ -198,7 +204,7 @@ public:
      * @return Load result with collection
      */
     LoadResult loadFromMemory(const void* data, PxU32 size,
-                              const LoadConfig& config = LoadConfig());
+                              const LoadConfig& config = LoadConfig::defaultConfig());
 
     /**
      * @brief Load collection from vector buffer
@@ -207,7 +213,7 @@ public:
      * @return Load result with collection
      */
     LoadResult loadFromBuffer(const std::vector<PxU8>& buffer,
-                              const LoadConfig& config = LoadConfig());
+                              const LoadConfig& config = LoadConfig::defaultConfig());
 
     // ========================================================================
     // Scene Integration

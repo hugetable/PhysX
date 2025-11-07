@@ -96,6 +96,11 @@ public:
         PxReal maxSteerAngle = 0.6f;    ///< Maximum steer angle (radians)
 
         WheelConfig() = default;
+
+        static const WheelConfig& defaultConfig() {
+            static const WheelConfig config;
+            return config;
+        }
     };
 
     /**
@@ -109,6 +114,11 @@ public:
         PxVec3 forceAppPoint = PxVec3(0, -0.3f, 0); ///< Force application point
 
         SuspensionConfig() = default;
+
+        static const SuspensionConfig& defaultConfig() {
+            static const SuspensionConfig config;
+            return config;
+        }
     };
 
     /**
@@ -121,6 +131,11 @@ public:
         PxReal dampingRateZeroThrottle = 2.0f;   ///< Damping at zero throttle
 
         EngineConfig() = default;
+
+        static const EngineConfig& defaultConfig() {
+            static const EngineConfig config;
+            return config;
+        }
     };
 
     /**
@@ -132,6 +147,11 @@ public:
         PxReal clutchStrength = 10.0f;     ///< Clutch strength
 
         TransmissionConfig() = default;
+
+        static const TransmissionConfig& defaultConfig() {
+            static const TransmissionConfig config;
+            return config;
+        }
     };
 
     /**
@@ -143,6 +163,11 @@ public:
         PxReal lateralStiffness = 1000.0f;      ///< Lateral stiffness
 
         TireFrictionConfig() = default;
+
+        static const TireFrictionConfig& defaultConfig() {
+            static const TireFrictionConfig config;
+            return config;
+        }
     };
 
     /**
@@ -182,6 +207,11 @@ public:
         PxTransform initialTransform = PxTransform(PxVec3(0, 2, 0));
 
         VehicleDesc() = default;
+
+        static const VehicleDesc& defaultDesc() {
+            static const VehicleDesc desc;
+            return desc;
+        }
     };
 
     /**
@@ -281,7 +311,7 @@ public:
      * @param desc Vehicle descriptor
      * @return Vehicle pointer (or nullptr on failure)
      */
-    Vehicle* createVehicle(const VehicleDesc& desc = VehicleDesc());
+    Vehicle* createVehicle(const VehicleDesc& desc = VehicleDesc::defaultDesc());
 
     /**
      * @brief Create simple 4-wheel vehicle

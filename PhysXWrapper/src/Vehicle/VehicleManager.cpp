@@ -378,8 +378,8 @@ void VehicleManager::updateVehicle(Vehicle* vehicle, PxReal deltaTime)
             PxReal totalForce = springForce - damperForce;
             PxVec3 suspensionForce = PxVec3(0, totalForce, 0);
 
-            // Apply suspension force to chassis
-            vehicle->chassis->addForceAtPos(suspensionForce, chassisWheelPos);
+            // Apply suspension force to chassis (PhysX 5.x: use PxRigidBodyExt)
+            PxRigidBodyExt::addForceAtPos(*vehicle->chassis, suspensionForce, chassisWheelPos);
 
             // Keep wheel at ground level
             PxVec3 targetWheelPos = hit.block.position + PxVec3(0, desc.wheelConfig.radius, 0);
@@ -415,7 +415,8 @@ void VehicleManager::updateVehicle(Vehicle* vehicle, PxReal deltaTime)
         for (int i = 0; i < 4; i++) {
             if (driveWheel[i] && vehicle->wheels[i]) {
                 PxVec3 driveForce = chassisForward * forcePerWheel;
-                vehicle->chassis->addForceAtPos(driveForce, vehicle->wheels[i]->getGlobalPose().p);
+                // PhysX 5.x: use PxRigidBodyExt::addForceAtPos
+                PxRigidBodyExt::addForceAtPos(*vehicle->chassis, driveForce, vehicle->wheels[i]->getGlobalPose().p);
             }
         }
     }
