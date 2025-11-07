@@ -3,8 +3,9 @@
 #include <optix.h>
 #include "physics_system_data.h"
 #include "per_ray_data.h"
-#include "vector_math.h"
+#include "vector_math_ext.h"
 #include "random_number_generators.h"
+#include "camera_definition.h"
 
 extern "C" {
 __constant__ PhysicsSystemData sysData;
