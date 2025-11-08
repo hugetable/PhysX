@@ -384,7 +384,6 @@ bool PhysicsRenderer::createPipeline() {
     char log[2048];
     size_t logSize = sizeof(log);
 
-    OptixProgramGroup raygenPG;
     OPTIX_CHECK(optixProgramGroupCreate(
         optixContext_,
         &raygenPGDesc,
@@ -392,7 +391,7 @@ bool PhysicsRenderer::createPipeline() {
         &pgOptions,
         log,
         &logSize,
-        &raygenPG
+        &raygenPG_
     ));
 
     // Miss 程序组
@@ -401,7 +400,6 @@ bool PhysicsRenderer::createPipeline() {
     missPGDesc.miss.module = optixModule_;
     missPGDesc.miss.entryFunctionName = "__miss__env_constant";
 
-    OptixProgramGroup missPG;
     OPTIX_CHECK(optixProgramGroupCreate(
         optixContext_,
         &missPGDesc,
@@ -409,7 +407,7 @@ bool PhysicsRenderer::createPipeline() {
         &pgOptions,
         log,
         &logSize,
-        &missPG
+        &missPG_
     ));
 
     // Hit 程序组
@@ -420,7 +418,6 @@ bool PhysicsRenderer::createPipeline() {
     hitPGDesc.hitgroup.moduleAH = nullptr;  // 暂时不使用 anyhit
     hitPGDesc.hitgroup.entryFunctionNameAH = nullptr;
 
-    OptixProgramGroup hitPG;
     OPTIX_CHECK(optixProgramGroupCreate(
         optixContext_,
         &hitPGDesc,
@@ -428,11 +425,11 @@ bool PhysicsRenderer::createPipeline() {
         &pgOptions,
         log,
         &logSize,
-        &hitPG
+        &hitPG_
     ));
 
     // 2. 创建管线
-    OptixProgramGroup programGroups[] = { raygenPG, missPG, hitPG };
+    OptixProgramGroup programGroups[] = { raygenPG_, missPG_, hitPG_ };
 
     OptixPipelineLinkOptions pipelineLinkOptions = {};
     pipelineLinkOptions.maxTraceDepth = config_.maxPathLength;
@@ -483,49 +480,85 @@ bool PhysicsRenderer::createPipeline() {
 bool PhysicsRenderer::createSBT() {
     std::cout << "  Creating Shader Binding Table..." << std::endl;
 
-    if (!pipeline_) {
-        std::cerr << "  Warning: No pipeline available, skipping SBT creation" << std::endl;
-        return true;
+    if (!pipeline_ || !raygenPG_ || !missPG_ || !hitPG_) {
+        std::cerr << "  Error: Pipeline or program groups not available" << std::endl;
+        return false;
     }
 
-    // TODO: 实现完整的 SBT 创建
-    // 这需要：
-    // 1. 为 raygen, miss, hit 记录分配 GPU 内存
-    // 2. 填充 SBT 记录数据
-    // 3. 设置 sbt_ 结构
+    // SBT 记录结构（对齐到 OPTIX_SBT_RECORD_ALIGNMENT）
+    template<typename T>
+    struct alignas(OPTIX_SBT_RECORD_ALIGNMENT) SbtRecord {
+        char header[OPTIX_SBT_RECORD_HEADER_SIZE];
+        T data;
+    };
 
-    std::cout << "  Shader Binding Table created (placeholder)" << std::endl;
+    // 1. Raygen 记录
+    using RaygenRecord = SbtRecord<int>;  // 简化：不需要额外数据
+    RaygenRecord raygenRecord;
+    OPTIX_CHECK(optixSbtRecordPackHeader(raygenPG_, &raygenRecord));
+    raygenRecord.data = 0;  // placeholder
+
+    CUdeviceptr d_raygenRecord;
+    CUDA_CHECK(cudaMalloc(reinterpret_cast<void**>(&d_raygenRecord), sizeof(RaygenRecord)));
+    CUDA_CHECK(cudaMemcpy(
+        reinterpret_cast<void*>(d_raygenRecord),
+        &raygenRecord,
+        sizeof(RaygenRecord),
+        cudaMemcpyHostToDevice
+    ));
+
+    // 2. Miss 记录
+    using MissRecord = SbtRecord<float3>;  // 背景颜色
+    MissRecord missRecord;
+    OPTIX_CHECK(optixSbtRecordPackHeader(missPG_, &missRecord));
+    missRecord.data = make_float3(0.1f, 0.1f, 0.15f);  // 深蓝色背景
+
+    CUdeviceptr d_missRecord;
+    CUDA_CHECK(cudaMalloc(reinterpret_cast<void**>(&d_missRecord), sizeof(MissRecord)));
+    CUDA_CHECK(cudaMemcpy(
+        reinterpret_cast<void*>(d_missRecord),
+        &missRecord,
+        sizeof(MissRecord),
+        cudaMemcpyHostToDevice
+    ));
+
+    // 3. Hit 记录
+    struct HitGroupData {
+        int materialID;
+        int geometryID;
+    };
+    using HitRecord = SbtRecord<HitGroupData>;
+
+    HitRecord hitRecord;
+    OPTIX_CHECK(optixSbtRecordPackHeader(hitPG_, &hitRecord));
+    hitRecord.data.materialID = 0;  // 默认材质
+    hitRecord.data.geometryID = 0;  // 默认几何
+
+    CUdeviceptr d_hitRecord;
+    CUDA_CHECK(cudaMalloc(reinterpret_cast<void**>(&d_hitRecord), sizeof(HitRecord)));
+    CUDA_CHECK(cudaMemcpy(
+        reinterpret_cast<void*>(d_hitRecord),
+        &hitRecord,
+        sizeof(HitRecord),
+        cudaMemcpyHostToDevice
+    ));
+
+    // 4. 配置 SBT
+    sbt_.raygenRecord = d_raygenRecord;
+
+    sbt_.missRecordBase = d_missRecord;
+    sbt_.missRecordStrideInBytes = sizeof(MissRecord);
+    sbt_.missRecordCount = 1;
+
+    sbt_.hitgroupRecordBase = d_hitRecord;
+    sbt_.hitgroupRecordStrideInBytes = sizeof(HitRecord);
+    sbt_.hitgroupRecordCount = 1;
+
+    std::cout << "  Shader Binding Table created successfully" << std::endl;
     return true;
 }
 
-void PhysicsRenderer::buildBLAS(const RenderableObject& obj, DynamicGeometry& geom) {
-    // TODO: 实现 BLAS 构建
-    // 对于简单的三角形网格：
-    // 1. 创建 OptixBuildInput（TYPE_TRIANGLES）
-    // 2. 设置顶点和索引缓冲区
-    // 3. 调用 optixAccelBuild
-    geom.handle = 0;  // 占位符
-}
-
-void PhysicsRenderer::updateBLAS(DynamicGeometry& geom) {
-    // TODO: 实现 BLAS 更新
-    // 使用 OPTIX_BUILD_OPERATION_UPDATE
-}
-
-void PhysicsRenderer::buildTLAS() {
-    if (dynamicGeometries_.empty()) {
-        return;
-    }
-
-    // TODO: 实现 TLAS 构建
-    // 1. 创建 OptixInstance 数组
-    // 2. 设置每个实例的变换矩阵和 BLAS handle
-    // 3. 上传实例数据到 GPU
-    // 4. 创建 OptixBuildInput（TYPE_INSTANCES）
-    // 5. 调用 optixAccelBuild
-
-    topLevelAS_ = 0;  // 占位符
-}
+// buildBLAS(), updateBLAS(), buildTLAS() 实现在 PhysicsRenderer_AS.cpp 中
 
 void PhysicsRenderer::cleanupOptixResources() {
     std::cout << "Cleaning up OptiX resources..." << std::endl;

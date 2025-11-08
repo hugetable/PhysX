@@ -156,6 +156,11 @@ private:
     OptixPipeline pipeline_;
     OptixShaderBindingTable sbt_;
 
+    // Program Groups
+    OptixProgramGroup raygenPG_;
+    OptixProgramGroup missPG_;
+    OptixProgramGroup hitPG_;
+
     // 加速结构
     OptixTraversableHandle topLevelAS_;
     std::vector<OptixInstance> instances_;

@@ -10,6 +10,7 @@ set(PHYSICS_RENDER_SOURCES
 
     # Rendering
     rendering/PhysicsRenderer.cpp
+    rendering/PhysicsRenderer_AS.cpp
 
     # Sync
     sync/SyncManager.cpp
