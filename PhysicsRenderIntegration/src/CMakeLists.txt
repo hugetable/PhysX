@@ -11,6 +11,10 @@ set(PHYSICS_RENDER_SOURCES
     # Rendering
     rendering/PhysicsRenderer.cpp
     rendering/PhysicsRenderer_AS.cpp
+    rendering/CameraManager.cpp
+    rendering/LightManager.cpp
+    rendering/MaterialSystemExtended.cpp
+    rendering/PerformanceOptimizer.cpp
 
     # Sync
     sync/SyncManager.cpp
